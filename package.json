@@ -1,28 +1,28 @@
 {
-  "name": "iobroker.template",
+  "name": "iobroker.oppoplayer",
   "version": "0.6.0",
-  "description": "ioBroker template Adapter",
+  "description": "oppoplayer",
   "author": {
-    "name": "@@Author@@",
-    "email": "@@email@@"
+    "name": "Volker Richert",
+    "email": "volker@richert.nrw"
   },
   "contributors": [
     {
-      "name": "@@Author@@",
-      "email": "@@email@@"
+      "name": "Volker Richert",
+      "email": "volker@richert.nrw"
     }
   ],
-  "homepage": "https://github.com/ioBroker/ioBroker.template",
+  "homepage": "https://github.com/ioBroker/ioBroker.oppoplayer",
   "license": "MIT",
   "keywords": [
     "ioBroker",
-    "template",
+    "oppoplayer",
     "Smart Home",
     "home automation"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ioBroker/ioBroker.template"
+    "url": "https://github.com/ioBroker/ioBroker.oppoplayer"
   },
   "dependencies": {},
   "devDependencies": {
@@ -35,7 +35,7 @@
     "test": "node node_modules/mocha/bin/mocha --exit"
   },
   "bugs": {
-    "url": "https://github.com/ioBroker/ioBroker.template/issues"
+    "url": "https://github.com/ioBroker/ioBroker.oppoplayer/issues"
   },
   "readmeFilename": "README.md"
 }
