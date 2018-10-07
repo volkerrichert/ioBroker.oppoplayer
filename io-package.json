@@ -8,10 +8,10 @@
         "de": "Initiale Version"
       }
     },
-    "title": "Javascript/Node.js based oppoplayer",
+    "title": "Oppo 20x",
     "titleLang": {
-      "en": "Javascript/Node.js based oppoplayer",
-      "de": "Javascript / Node.js basierte oppo"
+      "en": "Oppo UHD player 20x",
+      "de": "Oppo UHD Player 20x"
     },
     "desc": {
       "en": "ioBroker oppoplayer",
@@ -21,7 +21,6 @@
       "Volker Richert <volker@richert.nrw>"
     ],
     "docs": {
-      "en": "docs/en/admin.md",
       "de": "docs/de/admin.md"
     },
     "platform": "Javascript/Node.js",
@@ -33,7 +32,7 @@
     "keywords": [
       "oppoplayer",
       "media",
-      "blueray", "br", "disc"
+      "blueray", "br", "disc", "uhd"
     ],
     "readme": "https://github.com/ioBroker/ioBroker.oppoplayer/blob/master/README.md",
     "loglevel": "info",
