@@ -69,7 +69,7 @@
                         .on('click', function () {
                             showToast(null, _('Be sure your device is not in standby mode.'));
                             $(this).addClass('disabled');
-                            startCounter(4);
+                            startCounter(10);
 
                             sendTo(null, 'browse', null, function (data) {
                                 stopCounter();
