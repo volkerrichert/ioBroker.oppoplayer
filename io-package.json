@@ -1,95 +1,880 @@
 {
-    "common": {
-        "name": "oppoplayer",
-        "version": "0.6.0",
-        "news": {
-            "0.6.0": {
-                "en": "Support of admin3",
-                "de": "Unterstützung von admin3",
-                "ru": "Поддержка admin3",
-                "pt": "Suporte de admin3",
-                "nl": "Ondersteuning van admin3",
-                "fr": "Support de admin3",
-                "it": "Supporto di admin3",
-                "es": "Soporte de admin3"
-            },
-            "0.5.0": {
-                "en": "beta version",
-                "de": "Betaversion",
-                "ru": "Бета версия",
-                "pt": "Versão beta",
-                "fr": "Version bêta",
-                "nl": "Beta versie"
-            },
-            "0.0.1": {
-                "en": "initial adapter",
-                "de": "Initiale Version",
-                "ru": "Первоначальный адаптер",
-                "pt": "Versão inicial",
-                "fr": "Version initiale",
-                "nl": "Eerste release"
-            }
-        },
-        "title": "Javascript/Node.js based oppoplayer",
-        "titleLang": {
-            "en": "Javascript/Node.js based oppoplayer",
-            "de": "Javascript / Node.js basierte Vorlagenadapter",
-            "ru": "Адаптер шаблонов на основе Javascript / Node.js",
-            "pt": "Adaptador de modelo baseado em Javascript / Node.js",
-            "nl": "Javascript / Node.js gebaseerde sjabloonadapter",
-            "fr": "Javascript / Node.js basé adaptateur de modèle",
-            "it": "Adattatore modello basato su Javascript / Node.js",
-            "es": "Adaptador de plantilla basado en JavaScript / Node.js"
-        },
-        "desc": {
-            "en": "ioBroker oppoplayer",
-            "de": "ioBroker Oppoplayer",
-            "ru": "ioBroker Oppoplayer как образец",
-            "pt": "Modelo de adaptador para o ioBroker",
-            "fr": "ioBroker adaptateur modèle",
-            "nl": "ioBroker Oppoplayer",
-            "it": "Adattatore modello ioBroker",
-            "es": "Adaptador de plantilla ioBroker"
-        },
-        "authors": [
-            "Volker Richert <volker@richert.nrw>"
-        ],
-        "docs": {
-            "en": "docs/en/admin.md",
-            "ru": "docs/ru/admin.md",
-            "de": "docs/de/admin.md",
-            "es": "docs/es/admin.md",
-            "it": "docs/it/admin.md",
-            "fr": "docs/fr/admin.md",
-            "nl": "docs/nl/admin.md",
-            "pt": "docs/pt/admin.md"
-        },
-        "platform": "Javascript/Node.js",
-        "mode": "daemon",
-        "icon": "oppoplayer.png",
-        "materialize": true,
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.oppoplayer/master/admin/oppoplayer.png",
-        "keywords": [
-            "oppoplayer",
-            "vis",
-            "GUI",
-            "graphical",
-            "scada"
-        ],
-        "readme": "https://github.com/ioBroker/ioBroker.oppoplayer/blob/master/README.md",
-        "loglevel": "info",
-        "type": "general",
-        "license": "MIT",
-        "messagebox": false,
-        "restartAdapters": [
-            "vis"
-        ]
+  "common": {
+    "name": "oppoplayer",
+    "version": "0.0.1",
+    "news": {
+      "0.0.1": {
+        "en": "initial adapter",
+        "de": "Initiale Version"
+      }
     },
-    "native": {
-        "test1": true,
-        "test2": 42,
-        "mySelect": "auto"
+    "title": "Javascript/Node.js based oppoplayer",
+    "titleLang": {
+      "en": "Javascript/Node.js based oppoplayer",
+      "de": "Javascript / Node.js basierte oppo"
     },
-    "objects": []
+    "desc": {
+      "en": "ioBroker oppoplayer",
+      "de": "ioBroker Oppoplayer"
+    },
+    "authors": [
+      "Volker Richert <volker@richert.nrw>"
+    ],
+    "docs": {
+      "en": "docs/en/admin.md",
+      "de": "docs/de/admin.md"
+    },
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "icon": "oppoplayer.png",
+    "materialize": true,
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.oppoplayer/master/admin/oppoplayer.png",
+    "keywords": [
+      "oppoplayer",
+      "media",
+      "blueray", "br", "disc"
+    ],
+    "readme": "https://github.com/ioBroker/ioBroker.oppoplayer/blob/master/README.md",
+    "loglevel": "info",
+    "type": "general",
+    "license": "MIT",
+    "messagebox": false,
+    "restartAdapters": [
+    ]
+  },
+  "native": {
+    "ip": "",
+    "volumeInDB": false,
+    "pollInterval": 5000,
+    "requestInterval": 100
+  },
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Information"
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "If connected to player",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "info.friendlyName",
+      "type": "state",
+      "common": {
+        "role": "info.name",
+        "name": "Friendly Name",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "settings",
+      "type": "channel",
+      "common": {
+        "name": "Settings and device commands"
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "settings.powerSystem",
+      "type": "state",
+      "common": {
+        "name": "System Power State",
+        "role": "switch.power",
+        "type": "boolean",
+        "write": true,
+        "read": true
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "settings.firmware",
+      "type": "state",
+      "common": {
+        "name": "firmware version",
+        "type": "string",
+        "write": false,
+        "read": true
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "settings.volume",
+      "type": "state",
+      "common": {
+        "name": "Volume",
+        "role": "level.volume",
+        "type": "int",
+        "write": true,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "settings.mute",
+      "type": "state",
+      "common": {
+        "name": "Mute",
+        "role": "state",
+        "type": "boolean",
+        "write": true,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "settings.verbose",
+      "type": "state",
+      "common": {
+        "name": "verbose mode",
+        "role": "level.volume",
+        "type": "string",
+        "write": false,
+        "read": true,
+        "states": {
+          "0": "OFF",
+          "1": "UNUSED",
+          "2": "UNSOLICITED STATUS UPDATE",
+          "3": "DETAILED STATUS UPDATE"
+        }
+      },
+      "native": {
+      }
+    },
+
+    {
+      "_id": "status",
+      "type": "channel",
+      "common": {
+        "name": "playback status"
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.playback",
+      "type": "state",
+      "common": {
+        "name": "Playback status",
+        "type": "string",
+        "role": "info",
+        "write": false,
+        "read": true,
+        "states": {
+          "NO DISC": "NO DISC",
+          "LOADING": "LOADING",
+          "OPEN": "OPEN",
+          "CLOSE": "CLOSE",
+          "PLAY": "PLAY",
+          "PAUSE": "PAUSE",
+          "STOP": "STOP",
+          "STEP": "STEP",
+          "FREV": "FAST REVERSE",
+          "FFWD": "FAST FORWARD",
+          "SFWD": "SLOW FORWARD",
+          "SREV": "SLOW REVERSE",
+          "SETUP": "SETUP",
+          "HOME MENU": "HOME MENU",
+          "HOME": "HOME MENU",
+          "MEDIA CENTER": "MEDIA CENTER"
+        }
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "status.resolution",
+      "type": "state",
+      "common": {
+        "name": "HDMI resolution",
+        "type": "string",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "status.disc",
+      "type": "state",
+      "common": {
+        "name": "Disc type",
+        "type": "string",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "status.audio",
+      "type": "state",
+      "common": {
+        "name": "Audio type",
+        "type": "string",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "status.audio.type",
+      "type": "state",
+      "common": {
+        "name": "Audio type",
+        "type": "string",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "status.audio.track",
+      "type": "state",
+      "common": {
+        "name": "Audio track",
+        "type": "string",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "status.audio.total",
+      "type": "state",
+      "common": {
+        "name": "Audio type total",
+        "type": "string",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "status.audio.language",
+      "type": "state",
+      "common": {
+        "name": "Audio type",
+        "type": "string",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {
+      }
+    },
+
+    {
+      "_id": "status.subtitle",
+      "type": "state",
+      "common": {
+        "name": "Subtitle type",
+        "type": "string",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "status.subtitle.number",
+      "type": "state",
+      "common": {
+        "name": "Subtitle number",
+        "type": "string",
+        "role": "info",
+        "write": true,
+        "read": true
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "status.subtitle.total",
+      "type": "state",
+      "common": {
+        "name": "Subtitle shift",
+        "type": "string",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "status.subtitle.language",
+      "type": "state",
+      "common": {
+        "name": "Subtitle language",
+        "type": "string",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "status.subtitle.shift",
+      "type": "state",
+      "common": {
+        "name": "Subtitle shift",
+        "type": "string",
+        "role": "info",
+        "write": true,
+        "read": true
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "status.osd",
+      "type": "state",
+      "common": {
+        "name": "OSD position",
+        "type": "string",
+        "role": "info",
+        "write": true,
+        "read": true
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "status.repeat",
+      "type": "state",
+      "common": {
+        "name": "Repeat Mode",
+        "type": "string",
+        "role": "info",
+        "write": true,
+        "read": true,
+        "states": {
+          "00": "OFF",
+          "01": "REPEAT ONE",
+          "02": "REPEAT CHAPTER",
+          "03": "REPEAT ALL",
+          "04": "REPEAT TITLE",
+          "05": "SHUFFLE",
+          "06": "RANDOM"
+        }
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "status.zoom",
+      "type": "state",
+      "common": {
+        "name": "OSD position",
+        "type": "string",
+        "role": "info",
+        "write": true,
+        "read": true,
+        "states": {
+          "00": "OFF",
+          "01": "STRETCH",
+          "02": "FULL",
+          "03": "UNDERSCAN",
+          "04": "1.2x",
+          "05": "1.3x",
+          "06": "1.5x",
+          "07": "2x",
+          "08": "3x",
+          "09": "4x",
+          "10": "1/2",
+          "11": "1/3",
+          "12": "1/4"
+        }
+      },
+      "native": {
+      }
+    },
+
+    {
+      "_id": "status.title",
+      "type": "state",
+      "common": {
+        "name": "Track / Title",
+        "type": "string",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.title.total",
+      "type": "state",
+      "common": {
+        "name": "Total",
+        "type": "int",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.title.current",
+      "type": "state",
+      "common": {
+        "name": "Current",
+        "type": "int",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+
+    {
+      "_id": "status.chapter",
+      "type": "state",
+      "common": {
+        "name": "Chapter",
+        "type": "string",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.chapter.total",
+      "type": "state",
+      "common": {
+        "name": "Total",
+        "type": "int",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.chapter.current",
+      "type": "state",
+      "common": {
+        "name": "Current",
+        "type": "int",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+
+    {
+      "_id": "status.elapsed",
+      "type": "channel",
+      "common": {
+        "name": "Elapsed time"
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.elapsed.title",
+      "type": "state",
+      "common": {
+        "name": " Track/Title elapsed time",
+        "type": "string",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.elapsed.title.h",
+      "type": "state",
+      "common": {
+        "name": "hour",
+        "type": "int",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.elapsed.title.m",
+      "type": "state",
+      "common": {
+        "name": "minute",
+        "type": "int",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.elapsed.title.s",
+      "type": "state",
+      "common": {
+        "name": "second",
+        "type": "int",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.elapsed.chapter",
+      "type": "state",
+      "common": {
+        "name": "Chapter elapsed time",
+        "type": "string",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.elapsed.chapter.h",
+      "type": "state",
+      "common": {
+        "name": "hour",
+        "type": "int",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.elapsed.chapter.m",
+      "type": "state",
+      "common": {
+        "name": "minute",
+        "type": "int",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.elapsed.chapter.s",
+      "type": "state",
+      "common": {
+        "name": "second",
+        "type": "int",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.elapsed.total",
+      "type": "state",
+      "common": {
+        "name": "Total elapsed time",
+        "type": "string",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.elapsed.total.h",
+      "type": "state",
+      "common": {
+        "name": "hour",
+        "type": "int",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.elapsed.total.m",
+      "type": "state",
+      "common": {
+        "name": "minute",
+        "type": "int",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.elapsed.total.s",
+      "type": "state",
+      "common": {
+        "name": "second",
+        "type": "int",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+
+    {
+      "_id": "status.remaining",
+      "type": "channel",
+      "common": {
+        "name": "remaining time",
+        "role": "info"
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.remaining.title",
+      "type": "state",
+      "common": {
+        "name": " Track/Title remaining time",
+        "type": "string",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.remaining.title.h",
+      "type": "state",
+      "common": {
+        "name": "hour",
+        "type": "int",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.remaining.title.m",
+      "type": "state",
+      "common": {
+        "name": "minute",
+        "type": "int",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.remaining.title.s",
+      "type": "state",
+      "common": {
+        "name": "second",
+        "type": "int",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.remaining.chapter",
+      "type": "state",
+      "common": {
+        "name": "Chapter remaining time",
+        "type": "string",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.remaining.chapter.h",
+      "type": "state",
+      "common": {
+        "name": "hour",
+        "type": "int",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.remaining.chapter.m",
+      "type": "state",
+      "common": {
+        "name": "minute",
+        "type": "int",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.remaining.chapter.s",
+      "type": "state",
+      "common": {
+        "name": "second",
+        "type": "int",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.remaining.total",
+      "type": "state",
+      "common": {
+        "name": "Total remaining time",
+        "type": "string",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.remaining.total.h",
+      "type": "state",
+      "common": {
+        "name": "hour",
+        "type": "int",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.remaining.total.m",
+      "type": "state",
+      "common": {
+        "name": "minute",
+        "type": "int",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.remaining.total.s",
+      "type": "state",
+      "common": {
+        "name": "second",
+        "type": "int",
+        "role": "info",
+        "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    
+    {
+      "_id": "settings.hdr",
+      "type": "state",
+      "common": {
+        "name": "HDR Setting",
+        "type": "string",
+        "role": "info",
+        "write": false,
+        "read": true
+      }
+    },
+    {
+      "_id": "status.hdr",
+      "type": "state",
+      "common": {
+        "name": "HDR Status",
+        "type": "string",
+        "role": "info",
+        "write": false,
+        "read": true
+      }
+    },
+    {
+      "_id": "status.3d",
+      "type": "state",
+      "common": {
+        "name": "3D Status",
+        "type": "string",
+        "role": "info",
+        "write": false,
+        "read": true
+      }
+    },
+    {
+      "_id": "settings.input",
+      "type": "state",
+      "common": {
+        "name": "Input Source",
+        "type": "string",
+        "role": "info",
+        "write": false,
+        "read": true
+      }
+    },
+    {
+      "_id": "status.aspect",
+      "type": "state",
+      "common": {
+        "name": "aspect ratio setting",
+        "type": "string",
+        "role": "info",
+        "write": false,
+        "read": true,
+        "states": {
+          "16WW": "16:9 Wide",
+          "16AW": "16:9 Wide Auto, currently wide",
+          "16A4": "16:9 Wide Auto, currently playing 4:3",
+          "21M0": "21:9 Movable, currently full screen mode",
+          "21M1": "21:9 Movable, currently playing 16:9 or 4:3 content",
+          "21M2": "21:9 Movable, currently playing 21:9 content",
+          "21F0": "21:9 Fixed, currently full screen mode",
+          "21F1": "21:9 Fixed, currently playing 16:9 or 4:3 content",
+          "21F2": "21:9 Fixed, currently playing 21:9 content",
+          "21C0": "21:9 Cropped, currently full screen mode",
+          "21C1": "21:9 Cropped, currently playing 16:9 or 4:3 content",
+          "21C2": "21:9 Cropped, currently playing 21;9 content"
+        }
+      }
+    }
+  ]
 }

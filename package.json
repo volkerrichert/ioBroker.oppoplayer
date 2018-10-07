@@ -24,7 +24,10 @@
     "type": "git",
     "url": "https://github.com/ioBroker/ioBroker.oppoplayer"
   },
-  "dependencies": {},
+  "dependencies": {
+    "grunt-cli": "^1.3.1",
+    "named-js-regexp": "^1.3.3"
+  },
   "devDependencies": {
     "gulp": "^3.9.1",
     "mocha": "^4.1.0",
