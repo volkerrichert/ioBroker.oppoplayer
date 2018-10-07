@@ -22,7 +22,6 @@ const node = null;
 const adapter = new utils.Adapter('oppoplayer');
 const client = new net.Socket();
 const parseTime = (player, data) => {
-    "use strict";
     data.h = parseInt(data.h);
     data.s = parseInt(data.s);
     data.m = parseInt(data.m);
@@ -50,23 +49,32 @@ let isPlayerOnline = false;
  */
 let commandQuere = [];
 
+
 let queryCommands = {
     'QPW': {    // Query power status'
-        state: 'settings.powerSystem',
         poll: false,
         response: '(?:QPW )?OK ([a-zA-Z]+)',
+        updateResponse: 'UPW ([01])',
+        state: 'info.online',
         handle: (player, state) => {
             isPlayerOnline = state === 'ON' || state === '1';
 
-            adapter.setState('settings.powerSystem', isPlayerOnline, true);
+            adapter.setState('info.online', isPlayerOnline, true);
             if (isPlayerOnline) {
                 sendRequest('SVM', '3');
-                updateStates(); // Update states when player is on
+
+                updatePowerOnStates(); // Update states when player is on
             } else {
                 commandQuere = []
             }
         },
-        updateResponse: 'UPW ([01])'
+        setState: (value) => {
+            if (value) {
+                sendRequest('POF');
+            } else {
+                sendRequest('PON');
+            }
+        }
     },
     'QVM': {    // Query verbose mode',
         state: 'settings.verbose',
@@ -87,7 +95,6 @@ let queryCommands = {
         poll: false,
         pollOnStart: true,
         handle: (player, volume) => {
-            "use strict";
             if (volume === 'MUT' || volume === 'MUTE' || volume === 'UMT') {
                 adapter.setState('settings.mute', volume !== 'UMT', true);
                 return 0;
@@ -117,7 +124,6 @@ let queryCommands = {
         response: '(?:QTK )?OK (?<text>(?<title>[0-9]+)/(?<total>[0-9]+))',
         poll: true,
         handle: (command, data) => {
-            "use strict";
             adapter.setState('status.title', data.text, true);
             adapter.setState('status.title.current', parseInt(data.title), true);
             adapter.setState('status.title.total', parseInt(data.total), true);
@@ -128,7 +134,6 @@ let queryCommands = {
         response: '(?:QCH )?OK (?<text>(?<chapter>[0-9]+)/(?<total>[0-9]+))',
         poll: true,
         handle: (player, data) => {
-            "use strict";
             adapter.setState('status.chapter', data.text, true);
             adapter.setState('status.chapter.current', parseInt(data.chapter), true);
             adapter.setState('status.chapter.total', parseInt(data.total), true);
@@ -300,10 +305,29 @@ let queryCommands = {
     },
     'QRP': {
         desc: 'Query Repeat Mode',
+        state: 'status.repeat',
         response: '(?:QRP )?OK (?<number>[0-5][0-5]) (?<text>[A-Za-z \-]+)',
         pollOnStart: true,
         handle: (player, data) => {
             adapter.setState('status.repeat', data.number, true)
+        },
+        setState(value) {
+            const params = {
+                "00": "OFF",
+                "01": "ONE",
+                "02": "CH",
+                "03": "ALL",
+                "04": "TT",
+                "05": "SHF",
+                "06": "RND"
+            };
+
+            if (typeof params[value] === 'string') {
+                sendRequest('SRP', params[value]);
+            } else {
+                adapter.log.error('[COMMAND] valid state ' + value);
+            }
+            sendRequest('QRP');  // cquery after update
         }
     },
     'QZM': {
@@ -385,6 +409,7 @@ let setCommands = {
 
 // some chacking stuff
 let updateCommands = {};
+let setter = {};
 
 Object.keys(queryCommands).forEach(function (key) {
     let command = queryCommands[key];
@@ -409,6 +434,10 @@ Object.keys(queryCommands).forEach(function (key) {
             handle: command.handle,
             state: command.state || false
         });
+    }
+
+    if (command.state && command.setState) {
+        setter[command.state] = command.setState;
     }
 });
 
@@ -435,58 +464,65 @@ adapter.on('unload', callback => {
     } // endTryCatch
 });
 
+let players = {};
+let list = [];
+let oppoDetect = null;
+
 // Some message was sent to adapter instance over message box. Used by email, pushover, text2speech, ...
 adapter.on('message', function (obj) {
-    if (typeof obj === 'object' && obj.message) {
+    if (typeof obj === 'object') {
         if (obj.command === 'browse') {
             if (obj.callback) {
-                adapter.log.info('oppo detect starting');
-                let oppoDetect = dgram.createSocket('udp4');
+                if (oppoDetect === null) {
+                    adapter.log.info('oppo detect starting');
+                    oppoDetect = dgram.createSocket('udp4');
 
-                oppoDetect.on('close', function () {
-                    adapter.log.info('detected oppo closed');
-                });
+                    oppoDetect.on('close', function () {
+                        adapter.log.info('detected oppo closed');
+                    });
 
-                oppoDetect.on('error', (err) => {
-                    adapter.log.error('OPPO discovering server error:\n${err.stack}');
-                    oppoDetect.close();
-                });
+                    oppoDetect.on('error', (err) => {
+                        adapter.log.error('OPPO discovering server error:\n${err.stack}');
+                        oppoDetect.close();
+                    });
 
-                oppoDetect.on('message', function (msg, rinfo) {
+                    oppoDetect.on('message', function (msg, rinfo) {
 
-                    let content = msg.toString();
+                        let content = msg.toString();
 
-                    // checking for OPPO Header
-                    if (content.startsWith('Notify:OPPO Player Start')) {
-                        let lines = content.split('\n');
-                        let ip = lines[1].split(':')[1] || "";
+                        // checking for OPPO Header
+                        if (content.startsWith('Notify:OPPO Player Start')) {
+                            let lines = content.split('\n');
+                            let ip = lines[1].split(':')[1] || "";
 
-                        if (ip !== "" && typeof players[ip] === 'undefined') {
-                            let playerName;
-                            if (lines.length > 3) { // OPPO 10x dosn't submit player name
-                                playerName = lines[3].split(':')[1];
-                            } else {
-                                playerName = "OPPO 10x (" + ip + ")"
+                            if (ip !== "" && typeof players[ip] === 'undefined') {
+                                let playerName;
+                                if (lines.length > 3) { // OPPO 10x dosn't submit player name
+                                    playerName = lines[3].split(':')[1];
+                                } else {
+                                    playerName = "OPPO 10x (" + ip + ")"
+                                }
+
+                                list.push(players[ip] = {
+                                    'ip': ip,
+                                    'port': lines[2].split(':')[1],
+                                    'name': playerName
+                                });
                             }
-                            ;
 
-                            let newPlayer = players[ip] = {
-                                'host': ip,
-                                'port': lines[2].split(':')[1],
-                                'name': playerName
-                            };
+                            adapter.sendTo(obj.from, obj.command, {error: null, list: list}, obj.callback);
                         }
-                    }
-                });
+                    });
 
-                oppoDetect.on('listening', function () {
-                    oppoDetect.setBroadcast(true);
-                    adapter.log.info('OPPO auto discovering started');
-                });
+                    oppoDetect.on('listening', function () {
+                        oppoDetect.setBroadcast(true);
+                        adapter.log.info('OPPO auto discovering started');
+                    });
 
-                oppoDetect.bind(7624);
-
-
+                    oppoDetect.bind(7624);
+                } else {
+                    adapter.sendTo(obj.from, obj.command, {error: null, list: list}, obj.callback);
+                }
             } // endIf
         } // endIf
     }
@@ -503,7 +539,7 @@ adapter.on('ready', function () {
         pollInterval = adapter.config.pollInterval || 5000;
         requestInterval = adapter.config.requestInterval || 100;
 
-        responseInterval = adapter.config.responseInterval || 2000;
+        responseInterval = adapter.config.responseInterval || 1000;
 
         main();
     } else adapter.log.warn('No IP-address set');
@@ -511,6 +547,7 @@ adapter.on('ready', function () {
 
 function main() {
     adapter.subscribeStates('*');
+    adapter.setState('info.ip', host, true);
 
     connect();
     // Constants & Variables
@@ -521,6 +558,7 @@ client.on('timeout', () => {
     pollingVar = false;
     adapter.log.warn('Player timed out due to no response');
     adapter.setState('info.connection', false, true);
+    adapter.setState('info.online', false, true);
     client.destroy();
     client.unref();
     setTimeout(() => connect(), 30000); // Connect again in 30 seconds
@@ -536,6 +574,7 @@ client.on('error', error => {
     else adapter.log.warn('Connection closed: ' + error);
     pollingVar = false;
     adapter.setState('info.connection', false, true);
+    adapter.setState('info.online', false, true);
     if (!connectingVar) {
         client.destroy();
         client.unref();
@@ -548,6 +587,7 @@ client.on('end', () => { // Oppo has closed the connection
     commandQuere = [];
     pollingVar = false;
     adapter.setState('info.connection', false, true);
+    adapter.setState('info.online', false, true);
     if (!connectingVar) {
         client.destroy();
         client.unref();
@@ -560,6 +600,7 @@ client.on('connect', () => { // Successfull connected
     connectingVar = null;
     adapter.setState('info.connection', true, true);
     adapter.log.info('[CONNECT] Adapter connected to OPPO player: ' + host + ':23');
+
     sendRequest('QPW'); // testing if OPPO powered
 });
 
@@ -578,25 +619,18 @@ client.on('data', data => {
 
 // Handle state changes
 adapter.on('stateChange', (id, state) => {
-    if (!id || !state || state.ack) return; // Ignore acknowledged state changes or error states
+    if (!id || !state || state.ack || state.from === 'system.adapter.' + adapter.namespace) return; // Ignore acknowledged state changes or error states or local changes
 
     id = id.substring(adapter.namespace.length + 1); // remove instance name and id
     state = state.val; // only get state value
 
     adapter.log.debug('[COMMAND] State Change - ID: ' + id + '; State: ' + state);
 
-    let quickNr;
-    const m = id.match(/(\w+)\.quickSelect(\d)$/);
-    if (m) {
-        quickNr = m[2];
-        id = m[1] + '.quickSelect'; // m[1] --> zone
-    } // endIf
-
-    let leadingZero;
-    switch (id) {
-        default:
-            adapter.log.error('[COMMAND] ' + id + ' is not a valid state');
-    } // endSwitch
+    if (typeof setter[id] === 'function') {
+        setter[id](state);
+    } else if (id.startsWith('remote')) {
+        sendRequest(id.substring(7).toUpperCase())
+    }
 }); // endOnStateChange
 
 adapter.getForeignObject(adapter.namespace, (err, obj) => { // create device namespace
@@ -628,7 +662,7 @@ let pollCommands = Object.keys(queryCommands).filter((key) => {
     return queryCommands[key].poll || false;
 })
 
-function updateStates() {
+function updatePowerOnStates() {
     adapter.log.debug('[CONNECT] Connected --> updating states');
 
     if (pollOnStartCommands.length > 0 && isPlayerOnline) {
@@ -655,11 +689,17 @@ function pollStates() { // Polls states
 } // endPollStates
 
 function sendRequest(cmd, param) {
+    const now = Date.now();
+
+    // remove first commands if older than [responseInterval]sec
+    // improve this
+    while (commandQuere.length > 0 && commandQuere[0].timestamp !== null && commandQuere[0].timestamp + responseInterval < now) {
+        commandQuere.shift();
+    }
+
     // player doesn't answer on most commands while being off. Don't queue them
     if (isPlayerOnline || cmd === 'QPW' || cmd === 'POW' || cmd === 'PON' ) {
         param = param || null;
-
-        let now = Date.now();
 
         commandQuere.push({
             'name': cmd,
@@ -667,16 +707,12 @@ function sendRequest(cmd, param) {
             'timestamp': null   // send timestemp
         });
 
-        // remove first commands if older than 2sec
-        // improve this
-        while (commandQuere.length > 0 && commandQuere[0].timestamp !== null && commandQuere[0].timestamp + responseInterval < now) {
-            commandQuere.shift();
-        }
-
         adapter.log.debug('[DEBUG] ==> Command queued: ' + cmd + (param !== null ? ' ' + param : ''));
 
         sendToClient();
     }
+
+
 } // endSendRequest
 
 function sendToClient() {
@@ -689,6 +725,12 @@ function sendToClient() {
             //client.setTimeout(responseInterval + 1000); // oppo has to answer in 3 sec
             client.write(CommandPrefix + command.name + (command.parameter !== null ? ' ' + command.parameter : '') + "\r\n");
         } else {
+            const now = Date.now();
+
+            while (commandQuere.length > 0 && commandQuere[0].timestamp !== null && commandQuere[0].timestamp + responseInterval < now) {
+                commandQuere.shift();
+            }
+
             if (client !== null) client.setTimeout(0);
         }
     } else {
@@ -697,7 +739,7 @@ function sendToClient() {
 };
 
 function handleResponse(data) {
-    if (!pollingVar && isPlayerOnline) { // Keep connection alive & poll states
+    if (!pollingVar && isPlayerOnline && pollInterval > 0) { // Keep connection alive & poll states
         pollingVar = true;
         setTimeout(() => pollStates(), pollInterval); // Poll states every configured  seconds
     } // endIf

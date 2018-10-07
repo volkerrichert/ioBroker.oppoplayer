@@ -39,18 +39,847 @@
     "loglevel": "info",
     "type": "general",
     "license": "MIT",
-    "messagebox": false,
+    "messagebox": true,
+    "subscribe": "messagebox",
     "restartAdapters": [
     ]
   },
   "native": {
     "ip": "",
-    "volumeInDB": false,
     "pollInterval": 5000,
     "requestInterval": 100
   },
   "objects": [],
   "instanceObjects": [
+    {
+      "_id": "remote",
+      "type": "channel",
+      "common": {
+        "name": "Remote control"
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.POW",
+      "type": "state",
+      "common": {
+        "name": "Toggle power STANDBY and ON",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.EJT",
+      "type": "state",
+      "common": {
+        "name": "Open/close the disc tray",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.PON",
+      "type": "state",
+      "common": {
+        "name": "Discrete on",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.POF",
+      "type": "state",
+      "common": {
+        "name": "Discrete off",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.DIM",
+      "type": "state",
+      "common": {
+        "name": "Dim front panel display",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.PUR",
+      "type": "state",
+      "common": {
+        "name": "Pure Audio mode (no video)",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.VUP",
+      "type": "state",
+      "common": {
+        "name": "Increase volume",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.VDN",
+      "type": "state",
+      "common": {
+        "name": "Decrease volume",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.MUT",
+      "type": "state",
+      "common": {
+        "name": "Mute audio",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.NU1",
+      "type": "state",
+      "common": {
+        "name": "Numeric key 1",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.NU2",
+      "type": "state",
+      "common": {
+        "name": "Numeric key 2",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.NU3",
+      "type": "state",
+      "common": {
+        "name": "Numeric key 3",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.NU4",
+      "type": "state",
+      "common": {
+        "name": "Numeric key 4",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.NU5",
+      "type": "state",
+      "common": {
+        "name": "Numeric key 5",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.NU6",
+      "type": "state",
+      "common": {
+        "name": "Numeric key 6",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.NU7",
+      "type": "state",
+      "common": {
+        "name": "Numeric key 7",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.NU8",
+      "type": "state",
+      "common": {
+        "name": "Numeric key 8",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.NU9",
+      "type": "state",
+      "common": {
+        "name": "Numeric key 9",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.NU0",
+      "type": "state",
+      "common": {
+        "name": "Numeric key 0",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.CLR",
+      "type": "state",
+      "common": {
+        "name": "Clear numeric input",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.GOT",
+      "type": "state",
+      "common": {
+        "name": "Play from a specified location",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.HOM",
+      "type": "state",
+      "common": {
+        "name": "Go to Home Menu to select media source",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.PUP",
+      "type": "state",
+      "common": {
+        "name": "Show previous page",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.PDN",
+      "type": "state",
+      "common": {
+        "name": "Show next page",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.OSD",
+      "type": "state",
+      "common": {
+        "name": "Show/hide on-screen display",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.TTL",
+      "type": "state",
+      "common": {
+        "name": "Show BD top menu or DVD title menu",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.MNU",
+      "type": "state",
+      "common": {
+        "name": "Show BD pop-up menu or DVD menu",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.NUP",
+      "type": "state",
+      "common": {
+        "name": "Up Arrow",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.NLT",
+      "type": "state",
+      "common": {
+        "name": "Left Right",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.NRT",
+      "type": "state",
+      "common": {
+        "name": "Right Arrow",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.NDN",
+      "type": "state",
+      "common": {
+        "name": "Down Arrow",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.SET",
+      "type": "state",
+      "common": {
+        "name": "Enter the player setup menu",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.RET",
+      "type": "state",
+      "common": {
+        "name": "Return to the previous menu or mode",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.RED",
+      "type": "state",
+      "common": {
+        "name": "Red",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.GRN",
+      "type": "state",
+      "common": {
+        "name": "Green",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.BLU",
+      "type": "state",
+      "common": {
+        "name": "Blue",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.YLW",
+      "type": "state",
+      "common": {
+        "name": "Yellow",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.STP",
+      "type": "state",
+      "common": {
+        "name": "Stop playback",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.PLA",
+      "type": "state",
+      "common": {
+        "name": "Start playback",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.PAU",
+      "type": "state",
+      "common": {
+        "name": "Pause playback",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.PRE",
+      "type": "state",
+      "common": {
+        "name": "Skip to previous",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.REV",
+      "type": "state",
+      "common": {
+        "name": "Fast reverse play",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.FWD",
+      "type": "state",
+      "common": {
+        "name": "Fast forward play",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.NXT",
+      "type": "state",
+      "common": {
+        "name": "Skip to next",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.AUD",
+      "type": "state",
+      "common": {
+        "name": "Change audio language or channel",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.SUB",
+      "type": "state",
+      "common": {
+        "name": "Change subtitle language",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.ANG",
+      "type": "state",
+      "common": {
+        "name": "Change camera angle",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.ZOM",
+      "type": "state",
+      "common": {
+        "name": "Zoom in/out and adjust aspect ratio",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.SAP",
+      "type": "state",
+      "common": {
+        "name": "Turn on/off Secondary Audio Program",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.ATB",
+      "type": "state",
+      "common": {
+        "name": "Repeat play the selected section",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.RPT",
+      "type": "state",
+      "common": {
+        "name": "Repeat play",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.PIP",
+      "type": "state",
+      "common": {
+        "name": "Show/hide Picture-in-Picture",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.HDM",
+      "type": "state",
+      "common": {
+        "name": "Switch output resolution",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.SUH",
+      "type": "state",
+      "common": {
+        "name": "Press and hold the SUBTITLE key. This activates the subtitle shift feature",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.OPT",
+      "type": "state",
+      "common": {
+        "name": "Show/hide the Option menu",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.M3D",
+      "type": "state",
+      "common": {
+        "name": "Show/hide the 2D-to-3D Conversion or 3D adjustment menu",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.SEH",
+      "type": "state",
+      "common": {
+        "name": "Display the Picture Adjustment menu",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.HDR",
+      "type": "state",
+      "common": {
+        "name": "Display the HDR selection menu",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.INH",
+      "type": "state",
+      "common": {
+        "name": "Show on-screen detailed information",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.RLH",
+      "type": "state",
+      "common": {
+        "name": "Set resolution to Auto (default) ",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.AVS",
+      "type": "state",
+      "common": {
+        "name": "Display the A/V Sync adjustment menu",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.GPA",
+      "type": "state",
+      "common": {
+        "name": "Gapless Play",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+    {
+      "_id": "remote.SRC",
+      "type": "state",
+      "common": {
+        "name": "Display the Input menu.",
+        "role": "button",
+        "type": "boolean",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },
+
     {
       "_id": "info",
       "type": "channel",
@@ -75,37 +904,51 @@
       }
     },
     {
+      "_id": "info.online",
+      "type": "state",
+      "common": {
+        "name": "System Power State",
+        "role": "indicator.alive",
+        "type": "boolean",
+        "write": true,
+        "read": true
+      },
+      "native": {
+      }
+    },
+    {
       "_id": "info.friendlyName",
       "type": "state",
       "common": {
         "role": "info.name",
         "name": "Friendly Name",
-        "type": "boolean",
+        "type": "string",
         "read": true,
-        "write": false,
-        "def": false
+        "write": true,
+        "def": "Oppo 20x"
       },
       "native": {
       }
     },
+    {
+      "_id": "info.ip",
+      "type": "state",
+      "common": {
+        "role": "info.ip",
+        "name": "IP of OPPO player",
+        "type": "string",
+        "read": true,
+        "write": false
+      },
+      "native": {
+      }
+    },
+
     {
       "_id": "settings",
       "type": "channel",
       "common": {
         "name": "Settings and device commands"
-      },
-      "native": {
-      }
-    },
-    {
-      "_id": "settings.powerSystem",
-      "type": "state",
-      "common": {
-        "name": "System Power State",
-        "role": "switch.power",
-        "type": "boolean",
-        "write": true,
-        "read": true
       },
       "native": {
       }
