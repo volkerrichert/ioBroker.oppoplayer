@@ -1,6 +1,6 @@
 {
   "name": "iobroker.oppoplayer",
-  "version": "0.6.0",
+  "version": "0.0.2",
   "description": "oppoplayer",
   "author": {
     "name": "Volker Richert",
@@ -18,7 +18,8 @@
     "ioBroker",
     "oppoplayer",
     "Smart Home",
-    "home automation"
+    "home automation",
+    "UHD", "OPPO", "20x"
   ],
   "repository": {
     "type": "git",

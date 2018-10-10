@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "oppoplayer",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "news": {
+      "0.0.2": {
+        "en": "providing most of the objects and remote keyy",
+        "de": "Fast alle Objekte werden befüllt und die Tasten der Remote stehen zur Verfügung"
+      },
       "0.0.1": {
         "en": "initial adapter",
         "de": "Initiale Version"
@@ -14,8 +18,8 @@
       "de": "Oppo UHD Player 20x"
     },
     "desc": {
-      "en": "ioBroker oppoplayer",
-      "de": "ioBroker Oppoplayer"
+      "en": "ioBroker Oppo 20x player adapter",
+      "de": "ioBroker OPPO player"
     },
     "authors": [
       "Volker Richert <volker@richert.nrw>"
