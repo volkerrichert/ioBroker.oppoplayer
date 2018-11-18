@@ -1,10 +1,14 @@
 {
   "common": {
     "name": "oppoplayer",
-    "version": "0.0.2",
+    "version": "0.1.0",
     "news": {
+      "0.1.0": {
+        "en": "handle changes on writeable states",
+        "de": "verarbeitung von Änderungen an den schreibbaren Stati"
+      },
       "0.0.2": {
-        "en": "providing most of the objects and remote keyy",
+        "en": "providing most of the objects and remote key",
         "de": "Fast alle Objekte werden befüllt und die Tasten der Remote stehen zur Verfügung"
       },
       "0.0.1": {
@@ -12,14 +16,14 @@
         "de": "Initiale Version"
       }
     },
-    "title": "Oppo 20x",
+    "title": "OPPO Digital 20x",
     "titleLang": {
-      "en": "Oppo UHD player 20x",
-      "de": "Oppo UHD Player 20x"
+      "en": "OPPO Digital UHD player 20x adapter",
+      "de": "OPPO Digital UHD Player 20x Adapter"
     },
     "desc": {
-      "en": "ioBroker Oppo 20x player adapter",
-      "de": "ioBroker OPPO player"
+      "en": "ioBroker OPPO Digital 20x player adapter",
+      "de": "ioBroker OPPO Digital 20x player Adapter"
     },
     "authors": [
       "Volker Richert <volker@richert.nrw>"
@@ -64,6 +68,17 @@
       }
     },
     {
+      "_id": "remote._cmd",
+      "type": "state",
+      "common": {
+        "name": "sends the given remote command to player",
+        "type": "string",
+        "write": true,
+        "read": false
+      },
+      "native": {
+      }
+    },    {
       "_id": "remote.POW",
       "type": "state",
       "common": {
@@ -1058,8 +1073,28 @@
         "name": "HDMI resolution",
         "type": "string",
         "role": "info",
-        "write": false,
-        "read": true
+        "write": true,
+        "read": true,
+        "states": {
+          "AUTO" : "AUTO",
+          "SRC" : "SRC",
+          "UHD_AUTO" : "UHD_AUTO",
+          "UHD24" : "UHD24",
+          "UHD50" : "UHD50",
+          "UHD60" : "UHD60",
+          "1080P_AUTO" : "1080P_AUTO",
+          "1080P24" : "1080P24",
+          "1080P50" : "1080P50",
+          "1080P60" : "1080P60",
+          "1080I50" : "1080I50",
+          "1080I60" : "1080I60",
+          "720P50" : "720P50",
+          "720P60" : "720P60",
+          "576P" : "576P",
+          "576I" : "576I",
+          "480P" : "480P",
+          "480I" : "480I"
+        }
       },
       "native": {
       }
@@ -1173,7 +1208,7 @@
       "_id": "status.subtitle.total",
       "type": "state",
       "common": {
-        "name": "Subtitle shift",
+        "name": "Subtitle total",
         "type": "string",
         "role": "info",
         "write": false,
@@ -1203,6 +1238,8 @@
         "type": "string",
         "role": "info",
         "write": true,
+        "min": -10,
+        "max": 10,
         "read": true
       },
       "native": {
@@ -1216,6 +1253,8 @@
         "type": "string",
         "role": "info",
         "write": true,
+        "min": 0,
+        "max": 5,
         "read": true
       },
       "native": {
@@ -1303,7 +1342,7 @@
         "name": "Current",
         "type": "int",
         "role": "info",
-        "write": false,
+        "write": true,
         "read": true
       },
       "native": {}
@@ -1340,7 +1379,7 @@
         "name": "Current",
         "type": "int",
         "role": "info",
-        "write": false,
+        "write": true,
         "read": true
       },
       "native": {}
@@ -1361,7 +1400,7 @@
         "name": " Track/Title elapsed time",
         "type": "string",
         "role": "info",
-        "write": false,
+        "write": true,
         "read": true
       },
       "native": {}
@@ -1403,13 +1442,25 @@
       "native": {}
     },
     {
+      "_id": "status.elapsed.title.seconds",
+      "type": "state",
+      "common": {
+        "name": "seconds",
+        "type": "int",
+        "role": "info",
+        "write": true,
+        "read": true
+      },
+      "native": {}
+    },
+    {
       "_id": "status.elapsed.chapter",
       "type": "state",
       "common": {
         "name": "Chapter elapsed time",
         "type": "string",
         "role": "info",
-        "write": false,
+        "write": true,
         "read": true
       },
       "native": {}
@@ -1451,13 +1502,25 @@
       "native": {}
     },
     {
+      "_id": "status.elapsed.chapter.seconds",
+      "type": "state",
+      "common": {
+        "name": "seconds",
+        "type": "int",
+        "role": "info",
+        "write": true,
+        "read": true
+      },
+      "native": {}
+    },
+    {
       "_id": "status.elapsed.total",
       "type": "state",
       "common": {
         "name": "Total elapsed time",
         "type": "string",
         "role": "info",
-        "write": false,
+        "write": true,
         "read": true
       },
       "native": {}
@@ -1494,6 +1557,18 @@
         "type": "int",
         "role": "info",
         "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.elapsed.total.seconds",
+      "type": "state",
+      "common": {
+        "name": "seconds",
+        "type": "int",
+        "role": "info",
+        "write": true,
         "read": true
       },
       "native": {}
@@ -1660,8 +1735,14 @@
         "name": "HDR Setting",
         "type": "string",
         "role": "info",
-        "write": false,
-        "read": true
+        "write": true,
+        "read": true,
+        "states": {
+          "AUTO": "Auto",
+          "ON": "On",
+          "OFF": "Off",
+          "STRIPMETADATA": "Strip Metadata"
+        }
       }
     },
     {
@@ -1693,8 +1774,16 @@
         "name": "Input Source",
         "type": "string",
         "role": "info",
-        "write": false,
-        "read": true
+        "write": true,
+        "read": true,
+        "states": {
+          "0": "Blu-ray player",
+          "1": "HDMI IN",
+          "2": "ARC: HDMI OUT",
+          "3": "OPTICAL IN",
+          "4": "COAXIAL IN (UDP-205 only)",
+          "5": "USB AUDIO IN (UDP-205 only)"
+        }
       }
     },
     {

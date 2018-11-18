@@ -9,6 +9,7 @@
 
 // you have to require the utils module and call adapter function
 const utils = require(__dirname + '/lib/utils'); // Get common adapter utils
+
 const net = require('net'); // import net
 const named = require('named-js-regexp');
 const dgram = require('dgram');
@@ -30,6 +31,17 @@ const parseTime = (player, data) => {
     return data;
 };
 
+const formatTime = (seconds) => {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+    return [
+        h > 0 ? h : '0' + h,
+        m > 9 ? m : '0' + m,
+        s > 9 ? s : '0' + s,
+    ].filter(a => a).join(':');
+}
+
 const CommandPrefix = "#";
 const AnswerPrefix = "@";
 
@@ -49,7 +61,6 @@ let isPlayerOnline = false;
  */
 let commandQuere = [];
 
-
 let queryCommands = {
     'QPW': {    // Query power status'
         poll: false,
@@ -68,6 +79,7 @@ let queryCommands = {
                 commandQuere = []
             }
         },
+        setterFor:['info.online'],
         setState: (value) => {
             if (value) {
                 sendRequest('POF');
@@ -82,14 +94,12 @@ let queryCommands = {
         response: '(?:QVM )?OK ([0-9])'
     },
     'QVR': {
-        desc: 'Query firmware version',
         state: 'settings.firmware',
         poll: false,
         pollOnStart: true,
         response: '(?:QVR )?OK ([a-zA-Z0-9 \-]+)'
     },
     'QVL': {
-        desc: 'Query volume',
         response: '(?:QVL )?OK ([a-zA-Z0-9]+)',
         updateResponse: 'UVL ([a-zA-Z0-9]+)',
         poll: false,
@@ -103,30 +113,39 @@ let queryCommands = {
             adapter.setState('settings.volume', parseInt(volume), true);
 
             return parseInt(volume);
+        },
+        setterFor: ['settings.mute', 'settings.volume'],
+        setState: (value) => {
+            sendRequest('SVL', value);
         }
     },
     'QHD': {
-        desc: 'Query HDMI resolution',
         state: 'status.resolution',
         response: '(?:QHD )?OK ([a-zA-Z\ ]+)',
         updateResponse: 'UVO ([^\\r]+)',
-        pollOnStart: true
+        pollOnStart: true,
+        setterFor: [],
+        setState: (value) => {
+            sendRequest('SHD', value);
+        }
     },
     'QPL': {
-        desc: 'Query playback status',
         state: 'status.playback',
         response: '(?:QPL )?OK ([a-zA-Z ]+)',
         updateResponse: 'UPL ([a-zA-Z ]+)',
         pollOnStart: true
     },
     'QTK': {
-        desc: 'Query Track/Title',
         response: '(?:QTK )?OK (?<text>(?<title>[0-9]+)/(?<total>[0-9]+))',
         poll: true,
         handle: (command, data) => {
             adapter.setState('status.title', data.text, true);
             adapter.setState('status.title.current', parseInt(data.title), true);
             adapter.setState('status.title.total', parseInt(data.total), true);
+        },
+        setterFor: ['status.title.current'],
+        setState: (id, value) => {
+            sendRequest("SRH", "T" + value)
         }
     },
     'QCH': {
@@ -137,6 +156,10 @@ let queryCommands = {
             adapter.setState('status.chapter', data.text, true);
             adapter.setState('status.chapter.current', parseInt(data.chapter), true);
             adapter.setState('status.chapter.total', parseInt(data.total), true);
+        },
+        setterFor: ['status.chapter.current'],
+        setState: (id, value) => {
+            sendRequest("SRH", "C" + value)
         }
     },
     'QTE': {
@@ -151,12 +174,18 @@ let queryCommands = {
                 adapter.setState('status.elapsed.title.h', data.h, true);
                 adapter.setState('status.elapsed.title.m', data.m, true);
                 adapter.setState('status.elapsed.title.s', data.s, true);
+                adapter.setState('status.elapsed.title.seconds', data.seconds, true);
             } else {
                 adapter.setState('status.elapsed.title', false, true);
                 adapter.setState('status.elapsed.title.h', false, true);
                 adapter.setState('status.elapsed.title.m', false, true);
                 adapter.setState('status.elapsed.title.s', false, true);
+                adapter.setState('status.elapsed.title.seconds', false, true);
             }
+        },
+        setterFor: ['status.elapsed.title', 'status.elapsed.title.seconds'],
+        setState: (id, value) => {
+            sendRequest("SRH", "T " + (parseInt(value) == value ?formatTime(value) : value ));
         }
     },
     'QTR': {
@@ -171,11 +200,13 @@ let queryCommands = {
                 adapter.setState('status.remaining.title.h', data.h, true);
                 adapter.setState('status.remaining.title.m', data.m, true);
                 adapter.setState('status.remaining.title.s', data.s, true);
+                adapter.setState('status.remaining.title.seconds', data.seconds, true);
             } else {
                 adapter.setState('status.remaining.title', false, true);
                 adapter.setState('status.remaining.title.h', false, true);
                 adapter.setState('status.remaining.title.m', false, true);
                 adapter.setState('status.remaining.title.s', false, true);
+                adapter.setState('status.remaining.title.seconds', data.seconds, true);
             }
         }
     },
@@ -191,12 +222,18 @@ let queryCommands = {
                 adapter.setState('status.elapsed.chapter.h', data.h, true);
                 adapter.setState('status.elapsed.chapter.m', data.m, true);
                 adapter.setState('status.elapsed.chapter.s', data.s, true);
+                adapter.setState('status.elapsed.chapter.seconds', data.seconds, true);
             } else {
                 adapter.setState('status.elapsed.chapter', false, true);
                 adapter.setState('status.elapsed.chapter.h', false, true);
                 adapter.setState('status.elapsed.chapter.m', false, true);
                 adapter.setState('status.elapsed.chapter.s', false, true);
+                adapter.setState('status.elapsed.chapter.seconds', false, true);
             }
+        },
+        setterFor: ['status.elapsed.chapter', 'status.elapsed.chapter.seconds'],
+        setState: (id, value) => {
+            sendRequest("SRH", "C " + (parseInt(value) == value ?formatTime(value) : value ))
         }
     },
     'QCR': {
@@ -211,11 +248,13 @@ let queryCommands = {
                 adapter.setState('status.remaining.chapter.h', data.h, true);
                 adapter.setState('status.remaining.chapter.m', data.m, true);
                 adapter.setState('status.remaining.chapter.s', data.s, true);
+                adapter.setState('status.remaining.chapter.seconds', data.seconds, true);
             } else {
                 adapter.setState('status.remaining.chapter', false, true);
                 adapter.setState('status.remaining.chapter.h', false, true);
                 adapter.setState('status.remaining.chapter.m', false, true);
                 adapter.setState('status.remaining.chapter.s', false, true);
+                adapter.setState('status.remaining.chapter.seconds', false, true);
             }
         }
     },
@@ -231,12 +270,18 @@ let queryCommands = {
                 adapter.setState('status.elapsed.total.h', data.h, true);
                 adapter.setState('status.elapsed.total.m', data.m, true);
                 adapter.setState('status.elapsed.total.s', data.s, true);
+                adapter.setState('status.elapsed.total.seconds', data.seconds, true);
             } else {
                 adapter.setState('status.elapsed.total', false, true);
                 adapter.setState('status.elapsed.total.h', false, true);
                 adapter.setState('status.elapsed.total.m', false, true);
                 adapter.setState('status.elapsed.total.s', false, true);
+                adapter.setState('status.elapsed.total.seconds', false, true);
             }
+        },
+        setterFor: ['status.elapsed.total', 'status.elapsed.total.seconds'],
+        setState: (id, value) => {
+            sendRequest("SRH", (parseInt(value) == value ?formatTime(value) : value ));
         }
     },
     'QRE': {
@@ -251,11 +296,13 @@ let queryCommands = {
                 adapter.setState('status.remaining.total.h', data.h, true);
                 adapter.setState('status.remaining.total.m', data.m, true);
                 adapter.setState('status.remaining.total.s', data.s, true);
+                adapter.setState('status.remaining.total.seconds', data.seconds, true);
             } else {
                 adapter.setState('status.remaining.total', false, true);
                 adapter.setState('status.remaining.total.h', false, true);
                 adapter.setState('status.remaining.total.m', false, true);
                 adapter.setState('status.remaining.total.s', false, true);
+                adapter.setState('status.remaining.total.seconds', false, true);
             }
         }
     },
@@ -295,13 +342,27 @@ let queryCommands = {
         desc: 'Query subtitle shift',
         state: 'status.subtitle.shift',
         response: '(?:QSH )?OK ([0-9\-]+)',
-        pollOnStart: true
+        pollOnStart: true,
+        setterFor: ['status.subtitle.shift'],
+        setState: (id, value) => {
+            var val = parseInt(value);
+            if (val >= -10 && val <= 10) {
+                sendRequest("SSH", value);
+            }
+        }
     },
     'QOP': {
         desc: 'Query OSD position',
         state: 'status.osd',
         response: '(?:QOP )?OK ([0-5]+)',
-        pollOnStart: true
+        pollOnStart: true,
+        setterFor: ['status.osd'],
+        setState: (id, value) => {
+            var val = parseInt(value);
+            if (val >= -10 && val <= 10) {
+                sendRequest("SOP", value);
+            }
+        }
     },
     'QRP': {
         desc: 'Query Repeat Mode',
@@ -311,7 +372,8 @@ let queryCommands = {
         handle: (player, data) => {
             adapter.setState('status.repeat', data.number, true)
         },
-        setState(value) {
+        setterFor: ['status.repeat'],
+        setState: (id, value) => {
             const params = {
                 "00": "OFF",
                 "01": "ONE",
@@ -325,7 +387,7 @@ let queryCommands = {
             if (typeof params[value] === 'string') {
                 sendRequest('SRP', params[value]);
             } else {
-                adapter.log.error('[COMMAND] valid state ' + value);
+                adapter.log.error('[COMMAND] valid repeat mode ' + value);
             }
             sendRequest('QRP');  // cquery after update
         }
@@ -336,28 +398,64 @@ let queryCommands = {
         pollOnStart: true,
         handle: (player, data) => {
             adapter.setState('status.zoom', data.number, true)
+        },
+        setterFor: ['status.zoom'],
+        setState: (id, value) => {
+            const params = {
+                "00": "1",
+                "01": "AR",
+                "02": "FS",
+                "03": "US",
+                "04": "1.2",
+                "05": "1.3",
+                "06": "1.5",
+                "07": "2",
+                "08": "3",
+                "09": "4",
+                "10": "1/2",
+                "11": "1/3",
+                "12": "1/4"
+            };
+
+            if (typeof params[value] === 'string') {
+                sendRequest('SZM', params[value]);
+            } else {
+                adapter.log.error('[COMMAND] valid zoom mode ' + value);
+            }
+            sendRequest("QZM");
         }
     },
 
     // added with UDP20X-54-1127
     'QHS': {
         desc: 'Query HDR Status',
-        state: 'settings.hdr',
-        response: '(?:QHR )?OK ([a-zA-Z\ ]+)',
+        state: 'status.hdr',
+        response: '(?:QHS )?OK ([a-zA-Z\ ]+)',
         pollOnStart: true
     },
     'QHR': {
         desc: 'Query HDR Settings',
-        state: 'status.hdr',
+        state: 'settings.hdr',
         response: '(?:QHR )?OK ([a-zA-Z\ ]+)',
-        pollOnStart: true
+        pollOnStart: true,
+        setterFor: ['settings.hdr'],
+        setState: (id, value) => {
+            sendRequest("SHR", value);
+        }
     },
     'QIS': {
         desc: 'Query Input Source',
         state: 'settings.input',
         response: '(?:QIS )?OK (?<number>[0-9]) (?<name>[a-zA-Z ]+)',
         updateResponse: 'UIS (?<number>[0-9]) (?<name>[a-zA-Z ]+)',
-        pollOnStart: true
+        handle: (player, data) => {
+            adapter.setState('settings.input', data.number, true)
+        },
+        pollOnStart: true,
+        setterFor: ['settings.input'],
+        setState: (id, value) => {
+            sendRequest("SIS", value);
+        }
     },
     'QAR': {
         desc: 'Query aspect ratio setting',
@@ -377,37 +475,72 @@ let queryCommands = {
 
 let setCommands = {
     'NOP': {
-        desc: 'no Opperation',
-        hasParameter: false,
         response: 'OK'
     },
     'SVM': {
-        desc: 'set verbose mode',
-        hasParameter: true,
         response: '(?:SVM )?OK (\\d)',
         queryCommand: 'QVM'
     },
     'POW': {
-        desc: 'power player on',
-        hasParameter: false,
         response: '(?:POW )?OK ([a-zA-Z]+)',
         queryCommand: 'QPW'
     },
     'PON': {
-        desc: 'Discrete on',
-        hasParameter: false,
         response: 'OK (ON)',
         queryCommand: 'QPW'
     },
     'POF': {
-        desc: 'Discrete off',
-        hasParameter: false,
         response: 'OK (OFF)',
         queryCommand: 'QPW'
-    }
+    },
+    'SHD': {
+        response: 'OK ([a-zA-Z0-9_]+)',
+        queryCommand: 'QHD'
+    },
+    'SSH': {
+        response: 'SSH OK ([0-9-]+)',
+        queryCommand: 'QSH'
+    },
+    'SOP': {
+        response: 'SOP OK ([0-9-]+)',
+        queryCommand: 'QOP'
+    },
+    'SZM': {
+        response: 'SZM OK ([a-zA-Z0-9_]+)',
+        queryCommand: 'QZM'
+    },
+    'SVL': {
+        response: 'SVL OK ([a-zA-Z0-9_]+)',
+        queryCommand: 'QVL'
+    },
+    'SRP': {
+        response: 'SRP OK ([a-zA-Z0-9_]+)',
+        queryCommand: 'QRP'
+    },
+    'SRH': {
+        response: 'SRP OK'
+    },
+    'DPL': { response: 'DPL OK' },
+    'RST': { response: 'RST OK' },
+    'STC': { response: 'STC OK ([ERTXCK])' },
+    'SHR': {
+        response: 'SRP OK ([a-zA-Z]+)',
+        queryCommand: 'QHR'
+    },
+    'SIS': {
+        response: 'SRP OK (?<number>[0-9]) (?<name>[a-zA-Z ]+)',
+        queryCommand: 'QIS'
+    },
+    'SSA': { response: 'SRP OK ([a-zA-Z]+)' },
+    'APP': { response: 'APP OK ([a-zA-Z]+)' },
+    'SSD': { response: 'SSD OK ([MSC]+)' },
+    'SDP': { response: 'SDP OK ([DPA]+)' },
+    'FWD': { response: 'FWD OK ([0-9\/]+)' },
+    'REV': { response: 'REV OK ([0-9/]+)' },
+    'QDR': { /* unimplemented */}
 };
 
-// some chacking stuff
+// some caching stuff
 let updateCommands = {};
 let setter = {};
 
@@ -436,8 +569,11 @@ Object.keys(queryCommands).forEach(function (key) {
         });
     }
 
-    if (command.state && command.setState) {
-        setter[command.state] = command.setState;
+    if (command.setterFor && command.setState) {
+        command.setterFor.forEach(state => {
+            setter[state] = command.setState;
+        })
+
     }
 });
 
@@ -451,6 +587,10 @@ Object.keys(setCommands).forEach(function (key) {
     }
 });
 
+let players = {};
+let list = [];
+let oppoDetect = null;
+
 // is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', callback => {
     try {
@@ -458,71 +598,20 @@ adapter.on('unload', callback => {
         adapter.setState('info.connection', false, true);
         client.destroy(); // kill connection
         client.unref();	// kill connection
+        stopOppoDetection();
+
         callback();
     } catch (e) {
         callback();
     } // endTryCatch
 });
 
-let players = {};
-let list = [];
-let oppoDetect = null;
-
 // Some message was sent to adapter instance over message box. Used by email, pushover, text2speech, ...
 adapter.on('message', function (obj) {
     if (typeof obj === 'object') {
         if (obj.command === 'browse') {
             if (obj.callback) {
-                if (oppoDetect === null) {
-                    adapter.log.info('oppo detect starting');
-                    oppoDetect = dgram.createSocket('udp4');
-
-                    oppoDetect.on('close', function () {
-                        adapter.log.info('detected oppo closed');
-                    });
-
-                    oppoDetect.on('error', (err) => {
-                        adapter.log.error('OPPO discovering server error:\n${err.stack}');
-                        oppoDetect.close();
-                    });
-
-                    oppoDetect.on('message', function (msg, rinfo) {
-
-                        let content = msg.toString();
-
-                        // checking for OPPO Header
-                        if (content.startsWith('Notify:OPPO Player Start')) {
-                            let lines = content.split('\n');
-                            let ip = lines[1].split(':')[1] || "";
-
-                            if (ip !== "" && typeof players[ip] === 'undefined') {
-                                let playerName;
-                                if (lines.length > 3) { // OPPO 10x dosn't submit player name
-                                    playerName = lines[3].split(':')[1];
-                                } else {
-                                    playerName = "OPPO 10x (" + ip + ")"
-                                }
-
-                                list.push(players[ip] = {
-                                    'ip': ip,
-                                    'port': lines[2].split(':')[1],
-                                    'name': playerName
-                                });
-                            }
-
-                            adapter.sendTo(obj.from, obj.command, {error: null, list: list}, obj.callback);
-                        }
-                    });
-
-                    oppoDetect.on('listening', function () {
-                        oppoDetect.setBroadcast(true);
-                        adapter.log.info('OPPO auto discovering started');
-                    });
-
-                    oppoDetect.bind(7624);
-                } else {
-                    adapter.sendTo(obj.from, obj.command, {error: null, list: list}, obj.callback);
-                }
+                adapter.sendTo(obj.from, obj.command, {error: null, list: list}, obj.callback);
             } // endIf
         } // endIf
     }
@@ -531,6 +620,8 @@ adapter.on('message', function (obj) {
 // is called when databases are connected and adapter received configuration.
 // start here!
 adapter.on('ready', function () {
+    startOppoDetection();
+
     if (adapter.config.ip) {
         adapter.log.info('[START] Starting OPPO player adapter');
 
@@ -545,12 +636,67 @@ adapter.on('ready', function () {
     } else adapter.log.warn('No IP-address set');
 });
 
+function stopOppoDetection() {
+    if (oppoDetect !== null) {
+        oppoDetect.close();
+        oppoDetect = null;
+    }
+}
+
+function startOppoDetection() {
+    adapter.log.info('[OPPO] sutodetect starting');
+    oppoDetect = dgram.createSocket('udp4');
+
+    oppoDetect.on('close', function () {
+        adapter.log.info('detected oppo closed');
+    });
+
+    oppoDetect.on('error', (err) => {
+        adapter.log.error("[OPPO] discovering server error: " + err.message);
+        oppoDetect.close();
+        oppoDetect = null;
+    });
+
+    oppoDetect.on('message', function (msg, rinfo) {
+        let content = msg.toString();
+
+        // checking for OPPO Header
+        if (content.startsWith('Notify:OPPO Player Start')) {
+            let lines = content.split('\n');
+            let ip = lines[1].split(':')[1] || "";
+
+            if (ip !== "" && typeof players[ip] === 'undefined') {
+                let playerName;
+                if (lines.length > 3) { // OPPO 10x dosn't submit player name
+                    playerName = lines[3].split(':')[1];
+                } else {
+                    playerName = "OPPO 10x (" + ip + ")"
+                }
+
+                list.push(players[ip] = {
+                    'ip': ip,
+                    'port': lines[2].split(':')[1],
+                    'name': playerName
+                });
+            }
+
+            adapter.sendTo(obj.from, obj.command, {error: null, list: list}, obj.callback);
+        }
+    });
+
+    oppoDetect.on('listening', function () {
+        oppoDetect.setBroadcast(true);
+        adapter.log.info('[OPPO] auto discovering started');
+    });
+
+    oppoDetect.bind(7624);
+}
+
 function main() {
     adapter.subscribeStates('*');
     adapter.setState('info.ip', host, true);
 
     connect();
-    // Constants & Variables
 }
 
 client.on('timeout', () => {
@@ -627,9 +773,12 @@ adapter.on('stateChange', (id, state) => {
     adapter.log.debug('[COMMAND] State Change - ID: ' + id + '; State: ' + state);
 
     if (typeof setter[id] === 'function') {
-        setter[id](state);
+        setter[id](id, state);
     } else if (id.startsWith('remote')) {
-        sendRequest(id.substring(7).toUpperCase())
+        if (id === 'remote._cmd') {
+            sendRequest(state.toUpperCase())
+            adapter.setState(id, '', true);
+        } else sendRequest(id.substring(7).toUpperCase())
     }
 }); // endOnStateChange
 
@@ -721,7 +870,7 @@ function sendToClient() {
         if (command.timestamp === null) {
             // command not send
             command.timestamp = Date.now();
-            adapter.log.debug('[DEBUG] ==> Command send: ' + command.name + (command.parameter !== null ? ' ' + command.parameter : ''));
+            adapter.log.debug('[DEBUG] ==> Command send: ' + CommandPrefix + command.name + (command.parameter !== null ? ' ' + command.parameter : ''));
             //client.setTimeout(responseInterval + 1000); // oppo has to answer in 3 sec
             client.write(CommandPrefix + command.name + (command.parameter !== null ? ' ' + command.parameter : '') + "\r\n");
         } else {
