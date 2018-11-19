@@ -40,7 +40,20 @@ const formatTime = (seconds) => {
         m > 9 ? m : '0' + m,
         s > 9 ? s : '0' + s,
     ].filter(a => a).join(':');
-}
+};
+
+const atoi = (addr) => {
+    if (!addr) return -1;
+
+    var parts = addr.split('.').map(function(str) {
+        return parseInt(str);
+    });
+
+    return (parts[0] ? parts[0] << 24 : 0) +
+        (parts[1] ? parts[1] << 16 : 0) +
+        (parts[2] ? parts[2] << 8  : 0) +
+        parts[3];
+};
 
 const CommandPrefix = "#";
 const AnswerPrefix = "@";
@@ -644,17 +657,32 @@ function stopOppoDetection() {
 }
 
 function startOppoDetection() {
-    adapter.log.info('[OPPO] sutodetect starting');
+    adapter.log.info('[OPPO] auto discovering starting');
     oppoDetect = dgram.createSocket('udp4');
 
     oppoDetect.on('close', function () {
-        adapter.log.info('detected oppo closed');
+        adapter.log.info('[OPPO] auto discovering stopped');
     });
 
     oppoDetect.on('error', (err) => {
         adapter.log.error("[OPPO] discovering server error: " + err.message);
         oppoDetect.close();
         oppoDetect = null;
+    });
+
+    let playerIp = -1;
+    let friendlyName = "";
+    adapter.getState("info.friendlyName", (err, state) => {
+        friendlyName = (state.ack ? state.val : "");
+
+        adapter.getState("info.ip", (err, state) => {
+            playerIp = (state.ack ? atoi(state.val) : -1);
+
+            if (!friendlyName && typeof players[playerIp] !== 'undefined') {
+                // write name of player
+                adapter.setState("info.friendlyName", players[playerIp].name, true);
+            }
+        });
     });
 
     oppoDetect.on('message', function (msg, rinfo) {
@@ -673,6 +701,12 @@ function startOppoDetection() {
                     playerName = "OPPO 10x (" + ip + ")"
                 }
 
+                if (!friendlyName && atoi(ip) === playerIp) {
+                    // write name of player
+                    adapter.setState("info.friendlyName", playerName, true);
+                    friendlyName = playerName;
+                }
+
                 list.push(players[ip] = {
                     'ip': ip,
                     'port': lines[2].split(':')[1],
@@ -680,7 +714,7 @@ function startOppoDetection() {
                 });
             }
 
-            adapter.sendTo(obj.from, obj.command, {error: null, list: list}, obj.callback);
+            //adapter.sendTo(obj.from, obj.command, {error: null, list: list}, obj.callback);
         }
     });
 
@@ -702,7 +736,7 @@ function main() {
 client.on('timeout', () => {
     commandQuere = [];
     pollingVar = false;
-    adapter.log.warn('Player timed out due to no response');
+    adapter.log.debug('Player timed out due to no response');
     adapter.setState('info.connection', false, true);
     adapter.setState('info.online', false, true);
     client.destroy();
@@ -712,15 +746,15 @@ client.on('timeout', () => {
 
 // Connection handling
 client.on('error', error => {
-    commandQuere = [];
-    if (connectingVar) return;
-    if (error.code === 'ECONNREFUSED') adapter.log.warn('Connection refused, make sure that there is no other Telnet connection');
-    else if (error.code === 'EHOSTUNREACH') adapter.log.warn('Player unreachable, check the Network Config of your OPPO player');
-    else if (error.code === 'EALREADY' || error.code === 'EISCONN') return adapter.log.warn('Adapter is already connecting/connected');
-    else adapter.log.warn('Connection closed: ' + error);
-    pollingVar = false;
     adapter.setState('info.connection', false, true);
     adapter.setState('info.online', false, true);
+    commandQuere = [];
+    if (connectingVar) return;
+    if (error.code === 'ECONNREFUSED') adapter.log.debug('Connection refused, make sure that there is no other Telnet connection');
+    else if (error.code === 'EHOSTUNREACH') adapter.log.debug('Player unreachable, check the Network Config of your OPPO player');
+    else if (error.code === 'EALREADY' || error.code === 'EISCONN') adapter.log.debug('Adapter is already connecting/connected');
+    else adapter.log.debug('Connection closed: ' + error);
+    pollingVar = false;
     if (!connectingVar) {
         client.destroy();
         client.unref();
@@ -755,7 +789,7 @@ client.on('data', data => {
     const dataArr = data.toString().split(/[\r\n]+/); // Split by Carriage Return
     for (let i = 0; i < dataArr.length; i++) {
         if (dataArr[i]) { // dataArr[i] contains element
-            adapter.log.debug('[DATA] <== Incoming data: ' + dataArr[i]);
+            adapter.log.silly('<== ' + dataArr[i]);
             handleResponse(dataArr[i]);
         } // endIf
     } // endFor
@@ -798,7 +832,7 @@ adapter.getForeignObject(adapter.namespace, (err, obj) => { // create device nam
  */
 function connect() {
     client.setTimeout(0);
-    adapter.log.info('[CONNECT] Trying to connect to ' + host + ':23');
+    adapter.log.debug('Trying to connect to ' + host + ':23');
     connectingVar = null;
     client.connect({port: 23, host: host});
 } // endConnect
@@ -812,7 +846,7 @@ let pollCommands = Object.keys(queryCommands).filter((key) => {
 })
 
 function updatePowerOnStates() {
-    adapter.log.debug('[CONNECT] Connected --> updating states');
+    adapter.log.debug('Connected --> updating states');
 
     if (pollOnStartCommands.length > 0 && isPlayerOnline) {
         let i = 0;
@@ -856,7 +890,7 @@ function sendRequest(cmd, param) {
             'timestamp': null   // send timestemp
         });
 
-        adapter.log.debug('[DEBUG] ==> Command queued: ' + cmd + (param !== null ? ' ' + param : ''));
+        adapter.log.silly('=== ' + cmd + (param !== null ? ' ' + param : ''));
 
         sendToClient();
     }
@@ -870,7 +904,7 @@ function sendToClient() {
         if (command.timestamp === null) {
             // command not send
             command.timestamp = Date.now();
-            adapter.log.debug('[DEBUG] ==> Command send: ' + CommandPrefix + command.name + (command.parameter !== null ? ' ' + command.parameter : ''));
+            adapter.log.debug('==> ' + CommandPrefix + command.name + (command.parameter !== null ? ' ' + command.parameter : ''));
             //client.setTimeout(responseInterval + 1000); // oppo has to answer in 3 sec
             client.write(CommandPrefix + command.name + (command.parameter !== null ? ' ' + command.parameter : '') + "\r\n");
         } else {
