@@ -36,15 +36,15 @@
     "icon": "oppoplayer.png",
     "materialize": true,
     "enabled": true,
-    "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.oppoplayer/master/admin/oppoplayer.png",
+    "extIcon": "https://raw.githubusercontent.com/volkerrichert/ioBroker.oppoplayer/master/admin/oppoplayer.png",
     "keywords": [
       "oppoplayer",
       "media",
       "blueray", "br", "disc", "uhd"
     ],
-    "readme": "https://github.com/ioBroker/ioBroker.oppoplayer/blob/master/README.md",
+    "readme": "https://github.com/volkerrichert/ioBroker.oppoplayer/blob/master/README.md",
     "loglevel": "info",
-    "type": "general",
+    "type": "multimedia",
     "license": "MIT",
     "messagebox": true,
     "subscribe": "messagebox",
