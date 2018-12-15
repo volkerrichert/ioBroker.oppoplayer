@@ -673,10 +673,10 @@ function startOppoDetection() {
     let playerIp = -1;
     let friendlyName = "";
     adapter.getState("info.friendlyName", (err, state) => {
-        friendlyName = (state.ack ? state.val : "");
+        friendlyName = (state && state.ack ? state.val : "");
 
         adapter.getState("info.ip", (err, state) => {
-            playerIp = (state.ack ? atoi(state.val) : -1);
+            playerIp = (state && state.ack ? atoi(state.val) : -1);
 
             if (!friendlyName && typeof players[playerIp] !== 'undefined') {
                 // write name of player
