@@ -5,6 +5,9 @@
 This adapter adds support for oppo digital UHD player (UDP-20x) to ioBroker. 
 You can control playback and query status.
 
+## Tips & Tricks
+* The player doesn't start the network interface 
+
 ## Contributors
 * volkerrichert
 
