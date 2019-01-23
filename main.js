@@ -8,7 +8,7 @@
 'use strict';
 
 // you have to require the utils module and call adapter function
-const utils = require(__dirname + '/lib/utils'); // Get common adapter utils
+const utils = require('@iobroker/adapter-core');
 
 const net = require('net'); // import net
 const named = require('named-js-regexp');
@@ -20,7 +20,10 @@ const node = null;
 // you have to call the adapter function and pass a options object
 // name has to be set and has to be equal to adapters folder name and main file name excluding extension
 // adapter will be restarted automatically every time as the configuration changed, e.g system.adapter.oppoplayer.0
-const adapter = new utils.Adapter('oppoplayer');
+const adapter = new utils.Adapter({
+    name: 'oppoplayer'
+});
+
 const client = new net.Socket();
 const parseTime = (player, data) => {
     data.h = parseInt(data.h);
