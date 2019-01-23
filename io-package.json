@@ -3,9 +3,13 @@
     "name": "oppoplayer",
     "version": "0.1.0",
     "news": {
+      "0.2.0": {
+        "en": "add Compact mode support",
+        "de": "Support für den Compact mode hinzugefügt"
+      },
       "0.1.0": {
         "en": "handle changes on writeable states",
-        "de": "verarbeitung von Änderungen an den schreibbaren Stati"
+        "de": "Verarbeitung von Änderungen an den schreibbaren Stati"
       },
       "0.0.2": {
         "en": "providing most of the objects and remote key",

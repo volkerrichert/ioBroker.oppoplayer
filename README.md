@@ -10,6 +10,9 @@ You can control playback and query status.
 
 ## Changelog
 
+### 0.2.0 ("Compact mode" release)
+* (volkerrichert) add support for compact mode 
+
 ### 0.1.0 (first public release)
 * (volkerrichert) handle changes on writeable states
 

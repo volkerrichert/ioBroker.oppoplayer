@@ -14,15 +14,10 @@ const net = require('net'); // import net
 const named = require('named-js-regexp');
 const dgram = require('dgram');
 
-//TODO remove me dummy
-const node = null;
-
 // you have to call the adapter function and pass a options object
 // name has to be set and has to be equal to adapters folder name and main file name excluding extension
 // adapter will be restarted automatically every time as the configuration changed, e.g system.adapter.oppoplayer.0
-const adapter = new utils.Adapter({
-    name: 'oppoplayer'
-});
+let adapter;
 
 const client = new net.Socket();
 const parseTime = (player, data) => {
@@ -48,7 +43,7 @@ const formatTime = (seconds) => {
 const atoi = (addr) => {
     if (!addr) return -1;
 
-    var parts = addr.split('.').map(function(str) {
+    let parts = addr.split('.').map(function(str) {
         return parseInt(str);
     });
 
@@ -361,7 +356,7 @@ let queryCommands = {
         pollOnStart: true,
         setterFor: ['status.subtitle.shift'],
         setState: (id, value) => {
-            var val = parseInt(value);
+            let val = parseInt(value);
             if (val >= -10 && val <= 10) {
                 sendRequest("SSH", value);
             }
@@ -374,7 +369,7 @@ let queryCommands = {
         pollOnStart: true,
         setterFor: ['status.osd'],
         setState: (id, value) => {
-            var val = parseInt(value);
+            let val = parseInt(value);
             if (val >= -10 && val <= 10) {
                 sendRequest("SOP", value);
             }
@@ -607,51 +602,6 @@ let players = {};
 let list = [];
 let oppoDetect = null;
 
-// is called when adapter shuts down - callback has to be called under any circumstances!
-adapter.on('unload', callback => {
-    try {
-        adapter.log.info('[END] Stopping Oppo player adapter...');
-        adapter.setState('info.connection', false, true);
-        client.destroy(); // kill connection
-        client.unref();	// kill connection
-        stopOppoDetection();
-
-        callback();
-    } catch (e) {
-        callback();
-    } // endTryCatch
-});
-
-// Some message was sent to adapter instance over message box. Used by email, pushover, text2speech, ...
-adapter.on('message', function (obj) {
-    if (typeof obj === 'object') {
-        if (obj.command === 'browse') {
-            if (obj.callback) {
-                adapter.sendTo(obj.from, obj.command, {error: null, list: list}, obj.callback);
-            } // endIf
-        } // endIf
-    }
-});
-
-// is called when databases are connected and adapter received configuration.
-// start here!
-adapter.on('ready', function () {
-    startOppoDetection();
-
-    if (adapter.config.ip) {
-        adapter.log.info('[START] Starting OPPO player adapter');
-
-        // init
-        host = adapter.config.ip;
-        pollInterval = adapter.config.pollInterval || 5000;
-        requestInterval = adapter.config.requestInterval || 100;
-
-        responseInterval = adapter.config.responseInterval || 1000;
-
-        main();
-    } else adapter.log.warn('No IP-address set');
-});
-
 function stopOppoDetection() {
     if (oppoDetect !== null) {
         oppoDetect.close();
@@ -800,36 +750,6 @@ client.on('data', data => {
 });
 
 
-// Handle state changes
-adapter.on('stateChange', (id, state) => {
-    if (!id || !state || state.ack || state.from === 'system.adapter.' + adapter.namespace) return; // Ignore acknowledged state changes or error states or local changes
-
-    id = id.substring(adapter.namespace.length + 1); // remove instance name and id
-    state = state.val; // only get state value
-
-    adapter.log.debug('[COMMAND] State Change - ID: ' + id + '; State: ' + state);
-
-    if (typeof setter[id] === 'function') {
-        setter[id](id, state);
-    } else if (id.startsWith('remote')) {
-        if (id === 'remote._cmd') {
-            sendRequest(state.toUpperCase())
-            adapter.setState(id, '', true);
-        } else sendRequest(id.substring(7).toUpperCase())
-    }
-}); // endOnStateChange
-
-adapter.getForeignObject(adapter.namespace, (err, obj) => { // create device namespace
-    if (!obj) {
-        adapter.setForeignObject(adapter.namespace, {
-            type: 'device',
-            common: {
-                name: 'OPPO player '
-            }
-        });
-    } // endIf
-});
-
 /**
  * Internals
  */
@@ -842,11 +762,11 @@ function connect() {
 
 let pollOnStartCommands = Object.keys(queryCommands).filter((key) => {
     return queryCommands[key].pollOnStart || false;
-})
+});
 
 let pollCommands = Object.keys(queryCommands).filter((key) => {
     return queryCommands[key].poll || false;
-})
+});
 
 function updatePowerOnStates() {
     adapter.log.debug('Connected --> updating states');
@@ -856,7 +776,7 @@ function updatePowerOnStates() {
         let intervalVar = setInterval(() => {
             sendRequest(pollOnStartCommands[i]);
             i++;
-            if (i == pollOnStartCommands.length) clearInterval(intervalVar);
+            if (i === pollOnStartCommands.length) clearInterval(intervalVar);
         }, requestInterval);
     }
 } // endUpdateStates
@@ -869,7 +789,7 @@ function pollStates() { // Polls states
         let intervalVar = setInterval(() => {
             sendRequest(pollCommands[i]);
             i++;
-            if (i == pollCommands.length) clearInterval(intervalVar);
+            if (i === pollCommands.length) clearInterval(intervalVar);
         }, requestInterval);
     }
 } // endPollStates
@@ -922,7 +842,7 @@ function sendToClient() {
     } else {
         if (client !== null) client.setTimeout(0);
     }
-};
+}
 
 function handleResponse(data) {
     if (!pollingVar && isPlayerOnline && pollInterval > 0) { // Keep connection alive & poll states
@@ -996,4 +916,98 @@ function setState(queryCommand, value) {
     if (queryCommand.state) {
         adapter.setState(queryCommand.state, value, true);
     }
+}
+
+function startAdapter(options) {
+    options = options || {};
+    Object.assign(options, {
+        name: 'oppoplayer',
+    });
+    adapter = new utils.Adapter(options);
+
+    // is called when adapter shuts down - callback has to be called under any circumstances!
+    adapter.on('unload', callback => {
+        try {
+            adapter.log.info('[END] Stopping Oppo player adapter...');
+            adapter.setState('info.connection', false, true);
+            client.destroy(); // kill connection
+            client.unref();	// kill connection
+            stopOppoDetection();
+
+            callback();
+        } catch (e) {
+            callback();
+        } // endTryCatch
+    });
+
+    // Some message was sent to adapter instance over message box. Used by email, pushover, text2speech, ...
+    adapter.on('message', function (obj) {
+        if (typeof obj === 'object') {
+            if (obj.command === 'browse') {
+                if (obj.callback) {
+                    adapter.sendTo(obj.from, obj.command, {error: null, list: list}, obj.callback);
+                } // endIf
+            } // endIf
+        }
+    });
+
+    // is called when databases are connected and adapter received configuration.
+    // start here!
+    adapter.on('ready', function () {
+        startOppoDetection();
+
+        if (adapter.config.ip) {
+            adapter.log.info('[START] Starting OPPO player adapter');
+
+            // init
+            host = adapter.config.ip;
+            pollInterval = adapter.config.pollInterval || 5000;
+            requestInterval = adapter.config.requestInterval || 100;
+
+            responseInterval = adapter.config.responseInterval || 1000;
+
+            main();
+        } else adapter.log.warn('No IP-address set');
+    });
+
+
+// Handle state changes
+    adapter.on('stateChange', (id, state) => {
+        if (!id || !state || state.ack || state.from === 'system.adapter.' + adapter.namespace) return; // Ignore acknowledged state changes or error states or local changes
+
+        id = id.substring(adapter.namespace.length + 1); // remove instance name and id
+        state = state.val; // only get state value
+
+        adapter.log.debug('[COMMAND] State Change - ID: ' + id + '; State: ' + state);
+
+        if (typeof setter[id] === 'function') {
+            setter[id](id, state);
+        } else if (id.startsWith('remote')) {
+            if (id === 'remote._cmd') {
+                sendRequest(state.toUpperCase());
+                adapter.setState(id, '', true);
+            } else sendRequest(id.substring(7).toUpperCase())
+        }
+    }); // endOnStateChange
+
+    adapter.getForeignObject(adapter.namespace, (err, obj) => { // create device namespace
+        if (!obj) {
+            adapter.setForeignObject(adapter.namespace, {
+                type: 'device',
+                common: {
+                    name: 'OPPO player '
+                }
+            });
+        } // endIf
+    });
+
+    return adapter;
+}
+
+// If started as allInOne/compact mode => return function to create instance
+if (module && module.parent) {
+    module.exports = startAdapter;
+} else {
+    // or start the instance directly
+    startAdapter();
 }
