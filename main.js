@@ -741,7 +741,7 @@ client.on('timeout', () => {
     adapter.setState('info.online', false, true);
     client.destroy();
     client.unref();
-    setTimeout(() => connect(), 30000); // Connect again in 30 seconds
+    connectingVar = setTimeout(() => connect(), 30000); // Connect again in 30 seconds
 });
 
 // Connection handling
@@ -771,7 +771,7 @@ client.on('end', () => { // Oppo has closed the connection
     if (!connectingVar) {
         client.destroy();
         client.unref();
-        setTimeout(() => connect(), 30000); // Connect again in 30 seconds
+        connectingVar = setTimeout(() => connect(), 30000); // Connect again in 30 seconds
     } // endIf
 });
 
