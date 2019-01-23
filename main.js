@@ -754,6 +754,8 @@ client.on('data', data => {
  * Internals
  */
 function connect() {
+    adapter.setState('info.connection', false, true);
+    adapter.setState('info.online', false, true);
     client.setTimeout(0);
     adapter.log.debug('Trying to connect to ' + host + ':23');
     connectingVar = null;
@@ -930,6 +932,7 @@ function startAdapter(options) {
         try {
             adapter.log.info('[END] Stopping Oppo player adapter...');
             adapter.setState('info.connection', false, true);
+            adapter.setState('info.online', false, true);
             client.destroy(); // kill connection
             client.unref();	// kill connection
             stopOppoDetection();

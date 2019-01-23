@@ -6,7 +6,8 @@ This adapter adds support for oppo digital UHD player (UDP-20x) to ioBroker.
 You can control playback and query status.
 
 ## Tips & Tricks
-* The player doesn't start the network interface 
+* The player doesn't start the network interface if it's connected to power again (confirmed by oppo).
+  If you disconnect him from power you have to use the trigger to start it.  
 
 ## Contributors
 * volkerrichert
