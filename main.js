@@ -62,7 +62,7 @@ let pollInterval;
 let requestInterval;
 let responseInterval;
 
-let pollingVar = null;
+let pollingVar = false;
 let connectingVar = null;
 let isPlayerOnline = false;
 
@@ -756,7 +756,7 @@ client.on('data', data => {
 function connect() {
     adapter.setState('info.connection', false, true);
     adapter.setState('info.online', false, true);
-    client.setTimeout(0);
+    client.setTimeout((pollInterval > 0 ? pollInterval * 2 : 30000));
     adapter.log.debug('Trying to connect to ' + host + ':23');
     connectingVar = null;
     client.connect({port: 23, host: host});
@@ -824,36 +824,42 @@ function sendRequest(cmd, param) {
 } // endSendRequest
 
 function sendToClient() {
-    if (commandQuere.length >= 1) {
-        let command = commandQuere[0];
-        if (command.timestamp === null) {
-            // command not send
-            command.timestamp = Date.now();
-            adapter.log.debug('==> ' + CommandPrefix + command.name + (command.parameter !== null ? ' ' + command.parameter : ''));
-            //client.setTimeout(responseInterval + 1000); // oppo has to answer in 3 sec
-            client.write(CommandPrefix + command.name + (command.parameter !== null ? ' ' + command.parameter : '') + "\r\n");
-        } else {
-            const now = Date.now();
+    //return new Promise(resolve => {
+        if (commandQuere.length >= 1) {
+            let command = commandQuere[0];
+            if (command.timestamp === null) {
+                // command not send
+                command.timestamp = Date.now();
+                adapter.log.debug('==> ' + CommandPrefix + command.name + (command.parameter !== null ? ' ' + command.parameter : ''));
+                client.write(CommandPrefix + command.name + (command.parameter !== null ? ' ' + command.parameter : '') + "\r\n");
+            } else {
+                const now = Date.now();
 
-            while (commandQuere.length > 0 && commandQuere[0].timestamp !== null && commandQuere[0].timestamp + responseInterval < now) {
-                commandQuere.shift();
+                while (commandQuere.length > 0 && commandQuere[0].timestamp !== null && commandQuere[0].timestamp + responseInterval < now) {
+                    commandQuere.shift();
+                }
             }
-
-            if (client !== null) client.setTimeout(0);
         }
-    } else {
-        if (client !== null) client.setTimeout(0);
-    }
+    //    resolve();
+   // });
 }
 
 function handleResponse(data) {
-    if (!pollingVar && isPlayerOnline && pollInterval > 0) { // Keep connection alive & poll states
+    adapter.log.debug("<== " + data);
+    adapter.log.debug(pollingVar + " / " + isPlayerOnline + " / " + pollInterval);
+    if (!pollingVar && isPlayerOnline) {
         pollingVar = true;
-        setTimeout(() => pollStates(), pollInterval); // Poll states every configured  seconds
-    } // endIf
+        if (pollInterval > 0) { // Keep connection alive & poll states
+            setTimeout(() => pollStates(), pollInterval); // Poll states every configured  seconds
+        } else if (pollInterval === 0) { // Keep connection alive without polling
+            setTimeout(() => { sendRequest('NOP');pollingVar = false;} , 15000);
+        }
+    }
+
     // get command out of String
     if (data.startsWith(AnswerPrefix)) {
         let answer = data.substr(1);
+
         let matched = null;
 
         if (answer.startsWith('U')) { // receive update response
@@ -964,10 +970,9 @@ function startAdapter(options) {
 
             // init
             host = adapter.config.ip;
-            pollInterval = adapter.config.pollInterval || 5000;
-            requestInterval = adapter.config.requestInterval || 100;
-
-            responseInterval = adapter.config.responseInterval || 1000;
+            pollInterval = parseInt(adapter.config.pollInterval || 5000);
+            requestInterval = parseInt(adapter.config.requestInterval || 100);
+            responseInterval = parseInt(adapter.config.responseInterval || 1000);
 
             main();
         } else adapter.log.warn('No IP-address set');
