@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "oppoplayer",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "news": {
+      "0.2.1": {
+        "en": "fixed power removed detection",
+        "de": "Ausschalten des Opps erkannen"
+      },
       "0.2.0": {
         "en": "add Compact mode support",
         "de": "Support für den Compact mode hinzugefügt"
