@@ -36,9 +36,6 @@
     "authors": [
       "Volker Richert <volker@richert.nrw>"
     ],
-    "docs": {
-      "de": "docs/de/admin.md"
-    },
     "platform": "Javascript/Node.js",
     "mode": "daemon",
     "icon": "oppoplayer.png",
