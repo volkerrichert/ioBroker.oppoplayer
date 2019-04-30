@@ -15,7 +15,7 @@ You can control playback and query status.
 ## Changelog
 
 ### 0.2.2
-* (volkerrichert) fixed power removed detection
+* (volkerrichert) "enable" compact mode
 
 ### 0.2.1 
 * (volkerrichert) fixed power removed detection
