@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "oppoplayer",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "news": {
+      "0.2.2": {
+        "en": "add compact to io-package",
+        "de": "compact zu io-package hinzugefügt"
+      },
       "0.2.1": {
         "en": "fixed power removed detection",
         "de": "Ausschalten des Opps erkannen"
@@ -41,6 +45,7 @@
     "icon": "oppoplayer.png",
     "materialize": true,
     "enabled": true,
+    "compact": true,
     "extIcon": "https://raw.githubusercontent.com/volkerrichert/ioBroker.oppoplayer/master/admin/oppoplayer.png",
     "keywords": [
       "oppoplayer",
