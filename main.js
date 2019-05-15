@@ -998,6 +998,8 @@ function startAdapter(options) {
         }
     }); // endOnStateChange
 
+    /*
+    Why?? normally unneeded ... and if: needs to go into "on('main') ..."
     adapter.getForeignObject(adapter.namespace, (err, obj) => { // create device namespace
         if (!obj) {
             adapter.setForeignObject(adapter.namespace, {
@@ -1008,6 +1010,7 @@ function startAdapter(options) {
             });
         } // endIf
     });
+    */
 
     return adapter;
 }
