@@ -442,7 +442,8 @@ let queryCommands = {
         desc: 'Query HDR Status',
         state: 'status.hdr',
         response: '(?:QHS )?OK ([a-zA-Z\ ]+)',
-        pollOnStart: true
+        pollOnStart: true,
+        poll: true
     },
     'QHR': {
         desc: 'Query HDR Settings',
