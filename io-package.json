@@ -1749,9 +1749,11 @@
         "read": true,
         "states": {
           "AUTO": "Auto",
-          "ON": "On",
-          "OFF": "Off",
-          "STRIPMETADATA": "Strip Metadata"
+          "On": "On",
+          "Off (BT.709)": "Off (BT.709)",
+          "Off (BT.2020)": "Off (BT.2020)",
+          "StripMetadata": "Strip Metadata",
+          "Dolby Vision": "Dolby Vision"
         }
       }
     },
