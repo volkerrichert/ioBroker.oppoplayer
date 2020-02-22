@@ -450,6 +450,7 @@ let queryCommands = {
         state: 'settings.hdr',
         response: '(?:QHR )?OK ([a-zA-Z\ ]+)',
         pollOnStart: true,
+        poll: true,
         setterFor: ['settings.hdr'],
         setState: (id, value) => {
             sendRequest("SHR", value);
