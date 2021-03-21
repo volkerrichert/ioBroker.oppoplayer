@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "oppoplayer",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "news": {
+      "0.2.3": {
+        "en": "add missing seconds to io-package to avoid warinng",
+        "de": "seconds zu io-package hinzugefügt um Warnungen zu vermeiden"
+      },
       "0.2.2": {
         "en": "add compact to io-package",
         "de": "compact zu io-package hinzugefügt"
@@ -1642,6 +1646,18 @@
       "native": {}
     },
     {
+      "_id": "status.remaining.title.seconds",
+      "type": "state",
+      "common": {
+        "name": "seconds",
+        "type": "int",
+        "role": "info",
+        "write": true,
+        "read": true
+      },
+      "native": {}
+    },
+    {
       "_id": "status.remaining.chapter",
       "type": "state",
       "common": {
@@ -1685,6 +1701,18 @@
         "type": "int",
         "role": "info",
         "write": false,
+        "read": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "status.remaining.chapter.seconds",
+      "type": "state",
+      "common": {
+        "name": "seconds",
+        "type": "int",
+        "role": "info",
+        "write": true,
         "read": true
       },
       "native": {}
@@ -1737,7 +1765,18 @@
       },
       "native": {}
     },
-    
+    {
+      "_id": "status.remaining.total.seconds",
+      "type": "state",
+      "common": {
+        "name": "seconds",
+        "type": "int",
+        "role": "info",
+        "write": true,
+        "read": true
+      },
+      "native": {}
+    },
     {
       "_id": "settings.hdr",
       "type": "state",
