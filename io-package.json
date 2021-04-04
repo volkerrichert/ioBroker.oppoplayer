@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "oppoplayer",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "news": {
+      "0.2.4": {
+        "en": "fix io-package.json",
+        "de": "fix io-package.json"
+      },
       "0.2.3": {
         "en": "add missing seconds to io-package to avoid warinng",
         "de": "seconds zu io-package hinzugefügt um Warnungen zu vermeiden"
@@ -46,6 +50,8 @@
     ],
     "platform": "Javascript/Node.js",
     "mode": "daemon",
+    "connectionType": "local",
+    "dataSource": "push",
     "icon": "oppoplayer.png",
     "materialize": true,
     "enabled": true,
@@ -1003,7 +1009,7 @@
       "common": {
         "name": "Volume",
         "role": "level.volume",
-        "type": "int",
+        "type": "number",
         "write": true,
         "read": true
       },
@@ -1342,7 +1348,7 @@
       "type": "state",
       "common": {
         "name": "Total",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": false,
         "read": true
@@ -1354,7 +1360,7 @@
       "type": "state",
       "common": {
         "name": "Current",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": true,
         "read": true
@@ -1379,7 +1385,7 @@
       "type": "state",
       "common": {
         "name": "Total",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": false,
         "read": true
@@ -1391,7 +1397,7 @@
       "type": "state",
       "common": {
         "name": "Current",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": true,
         "read": true
@@ -1424,7 +1430,7 @@
       "type": "state",
       "common": {
         "name": "hour",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": false,
         "read": true
@@ -1436,7 +1442,7 @@
       "type": "state",
       "common": {
         "name": "minute",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": false,
         "read": true
@@ -1448,7 +1454,7 @@
       "type": "state",
       "common": {
         "name": "second",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": false,
         "read": true
@@ -1460,7 +1466,7 @@
       "type": "state",
       "common": {
         "name": "seconds",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": true,
         "read": true
@@ -1484,7 +1490,7 @@
       "type": "state",
       "common": {
         "name": "hour",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": false,
         "read": true
@@ -1496,7 +1502,7 @@
       "type": "state",
       "common": {
         "name": "minute",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": false,
         "read": true
@@ -1508,7 +1514,7 @@
       "type": "state",
       "common": {
         "name": "second",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": false,
         "read": true
@@ -1520,7 +1526,7 @@
       "type": "state",
       "common": {
         "name": "seconds",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": true,
         "read": true
@@ -1544,7 +1550,7 @@
       "type": "state",
       "common": {
         "name": "hour",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": false,
         "read": true
@@ -1556,7 +1562,7 @@
       "type": "state",
       "common": {
         "name": "minute",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": false,
         "read": true
@@ -1568,7 +1574,7 @@
       "type": "state",
       "common": {
         "name": "second",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": false,
         "read": true
@@ -1580,7 +1586,7 @@
       "type": "state",
       "common": {
         "name": "seconds",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": true,
         "read": true
@@ -1614,7 +1620,7 @@
       "type": "state",
       "common": {
         "name": "hour",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": false,
         "read": true
@@ -1626,7 +1632,7 @@
       "type": "state",
       "common": {
         "name": "minute",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": false,
         "read": true
@@ -1638,7 +1644,7 @@
       "type": "state",
       "common": {
         "name": "second",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": false,
         "read": true
@@ -1650,7 +1656,7 @@
       "type": "state",
       "common": {
         "name": "seconds",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": true,
         "read": true
@@ -1674,7 +1680,7 @@
       "type": "state",
       "common": {
         "name": "hour",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": false,
         "read": true
@@ -1686,7 +1692,7 @@
       "type": "state",
       "common": {
         "name": "minute",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": false,
         "read": true
@@ -1698,7 +1704,7 @@
       "type": "state",
       "common": {
         "name": "second",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": false,
         "read": true
@@ -1710,7 +1716,7 @@
       "type": "state",
       "common": {
         "name": "seconds",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": true,
         "read": true
@@ -1734,7 +1740,7 @@
       "type": "state",
       "common": {
         "name": "hour",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": false,
         "read": true
@@ -1746,7 +1752,7 @@
       "type": "state",
       "common": {
         "name": "minute",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": false,
         "read": true
@@ -1758,7 +1764,7 @@
       "type": "state",
       "common": {
         "name": "second",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": false,
         "read": true
@@ -1770,7 +1776,7 @@
       "type": "state",
       "common": {
         "name": "seconds",
-        "type": "int",
+        "type": "number",
         "role": "info",
         "write": true,
         "read": true
