@@ -64,6 +64,7 @@
     ],
     "readme": "https://github.com/volkerrichert/ioBroker.oppoplayer/blob/master/README.md",
     "loglevel": "info",
+    "tier": 2,
     "type": "multimedia",
     "licenseInformation": {
       "type": "free",
