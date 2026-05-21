@@ -60,7 +60,10 @@
     "keywords": [
       "oppoplayer",
       "media",
-      "blueray", "br", "disc", "uhd"
+      "blueray",
+      "br",
+      "disc",
+      "uhd"
     ],
     "readme": "https://github.com/volkerrichert/ioBroker.oppoplayer/blob/master/README.md",
     "loglevel": "info",
@@ -72,7 +75,11 @@
     },
     "messagebox": true,
     "subscribe": "messagebox",
-    "restartAdapters": [
+    "restartAdapters": [],
+    "dependencies": [
+      {
+        "js-controller": ">=6.0.11"
+      }
     ]
   },
   "native": {
@@ -88,8 +95,7 @@
       "common": {
         "name": "Remote control"
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote._cmd",
@@ -100,9 +106,9 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
-    },    {
+      "native": {}
+    },
+    {
       "_id": "remote.POW",
       "type": "state",
       "common": {
@@ -112,8 +118,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.EJT",
@@ -125,8 +130,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.PON",
@@ -138,8 +142,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.POF",
@@ -151,8 +154,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.DIM",
@@ -164,8 +166,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.PUR",
@@ -177,8 +178,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.VUP",
@@ -190,8 +190,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.VDN",
@@ -203,8 +202,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.MUT",
@@ -216,8 +214,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.NU1",
@@ -229,8 +226,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.NU2",
@@ -242,8 +238,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.NU3",
@@ -255,8 +250,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.NU4",
@@ -268,8 +262,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.NU5",
@@ -281,8 +274,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.NU6",
@@ -294,8 +286,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.NU7",
@@ -307,8 +298,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.NU8",
@@ -320,8 +310,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.NU9",
@@ -333,8 +322,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.NU0",
@@ -346,8 +334,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.CLR",
@@ -359,8 +346,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.GOT",
@@ -372,8 +358,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.HOM",
@@ -385,8 +370,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.PUP",
@@ -398,8 +382,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.PDN",
@@ -411,8 +394,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.OSD",
@@ -424,8 +406,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.TTL",
@@ -437,8 +418,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.MNU",
@@ -450,8 +430,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.NUP",
@@ -463,8 +442,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.NLT",
@@ -476,8 +454,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.NRT",
@@ -489,8 +466,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.NDN",
@@ -502,8 +478,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.SET",
@@ -515,8 +490,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.RET",
@@ -528,8 +502,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.RED",
@@ -541,8 +514,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.GRN",
@@ -554,8 +526,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.BLU",
@@ -567,8 +538,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.YLW",
@@ -580,8 +550,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.STP",
@@ -593,8 +562,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.PLA",
@@ -606,8 +574,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.PAU",
@@ -619,8 +586,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.PRE",
@@ -632,8 +598,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.REV",
@@ -645,8 +610,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.FWD",
@@ -658,8 +622,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.NXT",
@@ -671,8 +634,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.AUD",
@@ -684,8 +646,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.SUB",
@@ -697,8 +658,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.ANG",
@@ -710,8 +670,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.ZOM",
@@ -723,8 +682,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.SAP",
@@ -736,8 +694,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.ATB",
@@ -749,8 +706,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.RPT",
@@ -762,8 +718,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.PIP",
@@ -775,8 +730,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.HDM",
@@ -788,8 +742,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.SUH",
@@ -801,8 +754,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.OPT",
@@ -814,8 +766,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.M3D",
@@ -827,8 +778,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.SEH",
@@ -840,8 +790,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.HDR",
@@ -853,8 +802,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.INH",
@@ -866,8 +814,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.RLH",
@@ -879,8 +826,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.AVS",
@@ -892,8 +838,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.GPA",
@@ -905,8 +850,7 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "remote.SRC",
@@ -918,18 +862,15 @@
         "write": true,
         "read": false
       },
-      "native": {
-      }
+      "native": {}
     },
-
     {
       "_id": "info",
       "type": "channel",
       "common": {
         "name": "Information"
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "info.connection",
@@ -942,8 +883,7 @@
         "write": false,
         "def": false
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "info.online",
@@ -955,8 +895,7 @@
         "write": true,
         "read": true
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "info.friendlyName",
@@ -969,8 +908,7 @@
         "write": true,
         "def": "Oppo 20x"
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "info.ip",
@@ -982,18 +920,15 @@
         "read": true,
         "write": false
       },
-      "native": {
-      }
+      "native": {}
     },
-
     {
       "_id": "settings",
       "type": "channel",
       "common": {
         "name": "Settings and device commands"
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "settings.firmware",
@@ -1004,8 +939,7 @@
         "write": false,
         "read": true
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "settings.volume",
@@ -1047,10 +981,8 @@
           "3": "DETAILED STATUS UPDATE"
         }
       },
-      "native": {
-      }
+      "native": {}
     },
-
     {
       "_id": "status",
       "type": "channel",
@@ -1087,8 +1019,7 @@
           "MEDIA CENTER": "MEDIA CENTER"
         }
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "status.resolution",
@@ -1100,28 +1031,27 @@
         "write": true,
         "read": true,
         "states": {
-          "AUTO" : "AUTO",
-          "SRC" : "SRC",
-          "UHD_AUTO" : "UHD_AUTO",
-          "UHD24" : "UHD24",
-          "UHD50" : "UHD50",
-          "UHD60" : "UHD60",
-          "1080P_AUTO" : "1080P_AUTO",
-          "1080P24" : "1080P24",
-          "1080P50" : "1080P50",
-          "1080P60" : "1080P60",
-          "1080I50" : "1080I50",
-          "1080I60" : "1080I60",
-          "720P50" : "720P50",
-          "720P60" : "720P60",
-          "576P" : "576P",
-          "576I" : "576I",
-          "480P" : "480P",
-          "480I" : "480I"
+          "AUTO": "AUTO",
+          "SRC": "SRC",
+          "UHD_AUTO": "UHD_AUTO",
+          "UHD24": "UHD24",
+          "UHD50": "UHD50",
+          "UHD60": "UHD60",
+          "1080P_AUTO": "1080P_AUTO",
+          "1080P24": "1080P24",
+          "1080P50": "1080P50",
+          "1080P60": "1080P60",
+          "1080I50": "1080I50",
+          "1080I60": "1080I60",
+          "720P50": "720P50",
+          "720P60": "720P60",
+          "576P": "576P",
+          "576I": "576I",
+          "480P": "480P",
+          "480I": "480I"
         }
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "status.disc",
@@ -1133,8 +1063,7 @@
         "write": false,
         "read": true
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "status.audio",
@@ -1146,8 +1075,7 @@
         "write": false,
         "read": true
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "status.audio.type",
@@ -1159,8 +1087,7 @@
         "write": false,
         "read": true
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "status.audio.track",
@@ -1172,8 +1099,7 @@
         "write": false,
         "read": true
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "status.audio.total",
@@ -1185,8 +1111,7 @@
         "write": false,
         "read": true
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "status.audio.language",
@@ -1198,10 +1123,8 @@
         "write": false,
         "read": true
       },
-      "native": {
-      }
+      "native": {}
     },
-
     {
       "_id": "status.subtitle",
       "type": "state",
@@ -1212,8 +1135,7 @@
         "write": false,
         "read": true
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "status.subtitle.number",
@@ -1225,8 +1147,7 @@
         "write": true,
         "read": true
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "status.subtitle.total",
@@ -1238,8 +1159,7 @@
         "write": false,
         "read": true
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "status.subtitle.language",
@@ -1251,8 +1171,7 @@
         "write": false,
         "read": true
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "status.subtitle.shift",
@@ -1266,8 +1185,7 @@
         "max": 10,
         "read": true
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "status.osd",
@@ -1281,8 +1199,7 @@
         "max": 5,
         "read": true
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "status.repeat",
@@ -1303,8 +1220,7 @@
           "06": "RANDOM"
         }
       },
-      "native": {
-      }
+      "native": {}
     },
     {
       "_id": "status.zoom",
@@ -1316,6 +1232,9 @@
         "write": true,
         "read": true,
         "states": {
+          "10": "1/2",
+          "11": "1/3",
+          "12": "1/4",
           "00": "OFF",
           "01": "STRETCH",
           "02": "FULL",
@@ -1325,16 +1244,11 @@
           "06": "1.5x",
           "07": "2x",
           "08": "3x",
-          "09": "4x",
-          "10": "1/2",
-          "11": "1/3",
-          "12": "1/4"
+          "09": "4x"
         }
       },
-      "native": {
-      }
+      "native": {}
     },
-
     {
       "_id": "status.title",
       "type": "state",
@@ -1371,7 +1285,6 @@
       },
       "native": {}
     },
-
     {
       "_id": "status.chapter",
       "type": "state",
@@ -1408,7 +1321,6 @@
       },
       "native": {}
     },
-
     {
       "_id": "status.elapsed",
       "type": "channel",
@@ -1597,7 +1509,6 @@
       },
       "native": {}
     },
-
     {
       "_id": "status.remaining",
       "type": "channel",
