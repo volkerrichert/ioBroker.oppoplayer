@@ -10,9 +10,9 @@
 // you have to require the utils module and call adapter function
 const utils = require('@iobroker/adapter-core');
 
-const net = require('net'); // import net
+const net = require('node:net'); // import net
 const named = require('named-js-regexp');
-const dgram = require('dgram');
+const dgram = require('node:dgram');
 
 // you have to call the adapter function and pass a options object
 // name has to be set and has to be equal to adapters folder name and main file name excluding extension
