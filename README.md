@@ -14,6 +14,10 @@ You can control playback and query status.
 
 ## Changelog
 
+
+### **WORK IN PROGRESS**
+- (ioBroker-Bot) Adapter requires js-controller >= 6.0.11 now.
+
 ### 0.2.3
 * (volkerrichert) add missing seconds definitions in io-package.json
 
