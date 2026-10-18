@@ -35,6 +35,8 @@ You can control playback and query status.
 ### 0.0.1 (not released)
 * (volkerrichert) initial commit
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## License
 The MIT License (MIT)
 
